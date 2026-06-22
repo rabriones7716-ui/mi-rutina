@@ -1,0 +1,17 @@
+{
+  "name": "Mi Rutina",
+  "short_name": "Mi Rutina",
+  "description": "Tu rutina diaria, entrenamiento de maratón y hábitos — saber qué toca ahora.",
+  "lang": "es",
+  "start_url": "./Mi_Rutina.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f7f7",
+  "theme_color": "#11998e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

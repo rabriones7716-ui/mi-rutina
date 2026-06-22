@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#11998e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mi Rutina">
+<title>Mi Rutina</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2316a085'/%3E%3Cpath d='M28 52 l14 14 l30 -32' fill='none' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --teal:#11998e; --green:#38ef7d; --ink:#16323a; --muted:#6b7e84;
+    --bg:#f4f7f7; --card:#ffffff; --line:#e4ebeb; --shadow:0 2px 10px rgba(16,40,45,.06);
+    --fe:#7E57C2; --familia:#EC407A; --salud:#26A69A; --phd:#1E88E5; --ingles:#43A047;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+    max-width:520px; margin:0 auto; min-height:100vh;
+    padding-bottom:78px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{padding:14px 14px 4px}
+  /* Header */
+  .top{
+    background:linear-gradient(135deg,var(--teal),var(--green));
+    color:#fff; padding:16px 16px 18px; border-radius:0 0 22px 22px;
+    box-shadow:0 6px 18px rgba(17,153,142,.25);
+  }
+  .top h1{margin:0;font-size:20px;font-weight:600;letter-spacing:.2px}
+  .top .sub{opacity:.92;font-size:13px;margin-top:2px}
+  .toprow{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:12px}
+  .chip{background:rgba(255,255,255,.18);backdrop-filter:blur(4px);border-radius:12px;padding:7px 11px;font-size:12px;line-height:1.25}
+  .chip b{font-size:15px;display:block;font-weight:600}
+  /* Cards */
+  .card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin:12px 0}
+  .card h2{margin:0 0 10px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .muted{color:var(--muted)}
+  .small{font-size:12px}
+  /* NOW card */
+  .now{background:linear-gradient(135deg,#0f3a3a,#14564f);color:#fff;border:none}
+  .now .lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7}
+  .now .title{font-size:21px;font-weight:600;margin:4px 0 2px;line-height:1.25}
+  .now .time{font-size:13px;opacity:.85}
+  .now .det{font-size:13px;opacity:.8;margin-top:6px;line-height:1.45}
+  .bar{height:7px;border-radius:5px;background:rgba(255,255,255,.18);margin:12px 0 6px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#9af7c4);border-radius:5px}
+  .nextline{display:flex;align-items:center;gap:8px;font-size:13px;opacity:.9;margin-top:8px}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.16);margin-left:auto}
+  /* Training banner */
+  .train{display:flex;align-items:center;gap:12px}
+  .train .ic{font-size:26px}
+  .train .t{font-weight:600;font-size:15px}
+  .train .km{margin-left:auto;text-align:right}
+  .train .km b{font-size:20px;color:var(--teal)}
+  /* Habits */
+  .habit{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:12px;border:1px solid var(--line);margin:8px 0;background:#fff;cursor:pointer;transition:.12s}
+  .habit:active{transform:scale(.99)}
+  .habit .hic{font-size:21px;width:26px;text-align:center}
+  .habit .ht{flex:1;font-size:14px;line-height:1.3}
+  .habit .ht small{display:block;color:var(--muted);font-size:11.5px}
+  .check{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex:none}
+  .habit.done{background:#effbf4;border-color:#bdebd1}
+  .habit.done .check{background:var(--salud);border-color:var(--salud)}
+  .habit.done .ht{color:var(--muted)}
+  /* Ring */
+  .ring{display:flex;align-items:center;gap:14px}
+  .ring svg{flex:none}
+  .ring .pct{font-size:26px;font-weight:700}
+  /* Timeline */
+  .tl{position:relative;margin-top:4px}
+  .blk{display:flex;gap:10px;padding:9px 6px;border-radius:10px;align-items:flex-start}
+  .blk + .blk{border-top:1px solid var(--line)}
+  .blk .tm{font-size:11.5px;color:var(--muted);width:42px;flex:none;padding-top:2px;font-variant-numeric:tabular-nums}
+  .blk .dot{width:10px;height:10px;border-radius:50%;flex:none;margin-top:5px}
+  .blk .bt{flex:1;font-size:13.5px;line-height:1.3}
+  .blk .bt small{display:block;color:var(--muted);font-size:11.5px}
+  .blk.cur{background:#eafaf3}
+  .blk.cur .bt{font-weight:600}
+  .blk.past{opacity:.5}
+  .bchk{font-size:13px;color:#cbd6d6;flex:none;padding-top:2px}
+  .blk.bdone .bchk{color:var(--salud)}
+  .blk.bdone .bt{text-decoration:line-through;color:var(--muted)}
+  .nowtag{font-size:10px;background:var(--teal);color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
+  /* Week */
+  .wday{display:flex;align-items:center;gap:10px;padding:11px 6px;border-radius:10px}
+  .wday + .wday{border-top:1px solid var(--line)}
+  .wday.today{background:#eafaf3}
+  .wday .d{width:42px;flex:none;text-align:center}
+  .wday .d b{display:block;font-size:15px}
+  .wday .d small{font-size:10px;color:var(--muted);text-transform:uppercase}
+  .wday .act{flex:1;font-size:13.5px}
+  .wday .act small{display:block;color:var(--muted);font-size:11.5px}
+  .wday .dist{font-weight:600;color:var(--teal);font-size:13px}
+  .phasebadge{display:inline-block;background:#e7f3ff;color:#1565c0;font-size:11px;padding:3px 9px;border-radius:20px}
+  /* Dashboard */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+  .stat b{font-size:24px;display:block}
+  .stat span{font-size:11.5px;color:var(--muted)}
+  .pbar{margin:10px 0}
+  .pbar .lab{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px}
+  .pbar .track{height:9px;background:var(--line);border-radius:6px;overflow:hidden}
+  .pbar .track > i{display:block;height:100%;border-radius:6px}
+  .heat{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:8px}
+  .heat .c{aspect-ratio:1;border-radius:3px;background:#e9efef}
+  /* Lists / más */
+  .lk{display:flex;align-items:center;gap:12px;padding:13px 6px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer}
+  .lk .li{font-size:19px;width:24px;text-align:center}
+  .lk .ar{margin-left:auto;color:#cbd6d6}
+  .mission{font-style:italic;line-height:1.5;color:#42306b;background:#f3effb;border-radius:12px;padding:13px}
+  .btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--teal),var(--green));color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:600;margin:8px 0;cursor:pointer}
+  .btn.sec{background:#fff;color:var(--teal);border:1.5px solid var(--teal)}
+  /* Bottom nav */
+  .nav{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:0 auto;background:#fff;border-top:1px solid var(--line);display:flex;padding:6px 2px 10px;z-index:50}
+  .nav button{flex:1;background:none;border:none;color:var(--muted);font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;cursor:pointer}
+  .nav button .ni{font-size:21px;line-height:1}
+  .nav button.on{color:var(--teal)}
+  .screen{display:none}
+  .screen.on{display:block;animation:f .2s ease}
+  @keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .sechead{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:16px 4px 2px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:30px;font-size:13px;opacity:0;transition:.25s;z-index:99;pointer-events:none;max-width:90%}
+  .toast.show{opacity:1}
+  a{color:var(--teal)}
+</style>
+</head>
+<body>
+
+<!-- ============ HOY ============ -->
+<section id="s-hoy" class="screen on">
+  <div class="top">
+    <h1 id="h-greet">Hoy</h1>
+    <div class="sub" id="h-date"></div>
+    <div class="toprow">
+      <div class="chip"><b id="h-count">—</b>días al maratón</div>
+      <div class="chip"><b id="h-week">—</b><span id="h-phase">plan</span></div>
+      <div class="chip"><b id="h-variant">—</b>variante de hoy</div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="card now" id="nowCard">
+      <div class="lbl">Ahora</div>
+      <div class="title" id="now-title">—</div>
+      <div class="time" id="now-time"></div>
+      <div class="bar"><i id="now-bar" style="width:0"></i></div>
+      <div class="det" id="now-det"></div>
+      <div class="nextline"><span>⏭️ Sigue:</span><span id="now-next">—</span><span class="pill" id="now-rem"></span></div>
+    </div>
+
+    <div class="card">
+      <h2>🏃 Entrenamiento de hoy</h2>
+      <div class="train">
+        <div class="ic" id="tr-ic">🏃</div>
+        <div><div class="t" id="tr-t">—</div><div class="small muted" id="tr-note"></div></div>
+        <div class="km"><b id="tr-km">—</b><div class="small muted">objetivo</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="27" fill="none" stroke="#e9efef" stroke-width="8"/>
+          <circle id="ringArc" cx="32" cy="32" r="27" fill="none" stroke="url(#g1)" stroke-width="8" stroke-linecap="round" stroke-dasharray="170" stroke-dashoffset="170" transform="rotate(-90 32 32)"/>
+          <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#11998e"/><stop offset="1" stop-color="#38ef7d"/></linearGradient></defs>
+        </svg>
+        <div><div class="pct"><span id="day-pct">0</span>%</div><div class="small muted">cumplimiento de hoy · <span id="day-frac">0/7</span> hábitos</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>✅ Hábitos clave de hoy</h2>
+      <div id="habitList"></div>
+    </div>
+
+    <div class="card">
+      <h2>🕐 Agenda del día <span class="small muted" id="ag-variant"></span></h2>
+      <div class="tl" id="timeline"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEMANA ============ -->
+<section id="s-semana" class="screen">
+  <div class="top"><h1>Semana</h1><div class="sub" id="wk-range"></div>
+    <div class="toprow"><div class="chip"><b id="wk-num">—</b>semana / 31</div><div class="chip"><b id="wk-km">—</b>km objetivo</div><div class="chip"><b id="wk-lr">—</b>long run sáb</div></div>
+  </div>
+  <div class="wrap">
+    <div class="card"><h2>📋 Fase actual</h2><div><span class="phasebadge" id="wk-phasebadge">—</span></div><p class="small muted" id="wk-notes" style="margin:10px 0 0"></p></div>
+    <div class="card"><h2>🗓️ Plan de la semana</h2><div id="weekList"></div></div>
+    <div class="card">
+      <h2>⚙️ Modo del fin de semana</h2>
+      <p class="small muted" style="margin:0 0 8px">Sem 4–9 (18-may → 28-jun) = <b>Intensivo</b> (trabajo profundo sáb/dom). Resto = Normal (descanso).</p>
+      <label class="habit" style="cursor:pointer"><span class="hic">🤲</span><span class="ht">Este sábado es de <b>Servicio</b><small>1×/mes · 15:00–17:00 mentoría/voluntariado</small></span><span class="check" id="servChk"></span></label>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CUADRO DE MANDO ============ -->
+<section id="s-cuadro" class="screen">
+  <div class="top"><h1>Cuadro de mando</h1><div class="sub">Tu adherencia y balance de pilares</div></div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b id="st-streak">0</b><span>🔥 racha (días)</span></div>
+      <div class="stat"><b id="st-week">0%</b><span>esta semana</span></div>
+      <div class="stat"><b id="st-month">0%</b><span>este mes</span></div>
+      <div class="stat"><b id="st-best">0</b><span>mejor racha</span></div>
+    </div>
+    <div class="card">
+      <h2>🧭 Balance de pilares (semana)</h2>
+      <div id="pillars"></div>
+    </div>
+    <div class="card">
+      <h2>🏅 Maratón</h2>
+      <div class="train" style="margin-bottom:10px"><div class="ic">📅</div><div><div class="t" id="mar-phase">—</div><div class="small muted" id="mar-week">—</div></div><div class="km"><b id="mar-pct">0%</b><div class="small muted">del plan</div></div></div>
+      <div class="bar" style="background:var(--line)"><i id="mar-bar" style="width:0;background:linear-gradient(90deg,var(--teal),var(--green))"></i></div>
+      <div class="small muted" style="margin-top:8px" id="mar-next">—</div>
+    </div>
+    <div class="card">
+      <h2>📊 Últimas 8 semanas</h2>
+      <div class="heat" id="heat"></div>
+      <div class="small muted" style="margin-top:8px">Cada cuadro = un día. Más verde = más cumplimiento.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MÁS ============ -->
+<section id="s-mas" class="screen">
+  <div class="top"><h1>Más</h1><div class="sub">Misión, recordatorios y datos</div></div>
+  <div class="wrap">
+    <div class="card">
+      <h2>🎯 Mi misión</h2>
+      <div class="mission">"Dios me puso aquí con un propósito: servir a los demás. Mi familia (esposa + Quimey), mi salud, mi conocimiento técnico y mi futuro PhD son herramientas para esa misión."</div>
+    </div>
+    <div class="card">
+      <h2>🔔 Recordatorios</h2>
+      <p class="small muted" style="margin:0 0 8px">Avisos en el teléfono a las horas clave. Para alarmas 100% confiables, exporta tu rutina al Calendario.</p>
+      <button class="btn" id="btnNotif">Activar avisos mientras la app está abierta</button>
+      <button class="btn sec" id="btnIcs">📅 Exportar a Google Calendar (.ics)</button>
+    </div>
+    <div class="card">
+      <h2>🎓 Ruta al PhD · Lectura en inglés</h2>
+      <div class="small" id="readList"></div>
+    </div>
+    <div class="card">
+      <h2>🌙 Rituales</h2>
+      <div class="small" id="ritualList"></div>
+    </div>
+    <div class="card">
+      <h2>💾 Mis datos</h2>
+      <button class="btn sec" id="btnExport">⬇️ Respaldar (descargar copia)</button>
+      <button class="btn sec" id="btnImport">⬆️ Restaurar copia</button>
+      <input type="file" id="fileImport" accept=".json" style="display:none">
+      <button class="btn sec" id="btnReset" style="color:#c0392b;border-color:#e6b3ab">🗑️ Borrar todo el historial</button>
+    </div>
+    <div class="card">
+      <h2>📲 Instalar en Android</h2>
+      <p class="small muted" style="margin:0 0 8px">Para instalarla como app real (pantalla completa, ícono propio y caché sin internet) hay que abrirla desde una <b>dirección web</b> (https):</p>
+      <ol class="small muted" style="margin:0;padding-left:18px;line-height:1.7">
+        <li>Sube esta carpeta a un hosting gratis (Netlify Drop o GitHub Pages — ver <b>LÉEME.txt</b>).</li>
+        <li>Abre esa URL en <b>Chrome</b> del teléfono.</li>
+        <li>Menú ⋮ → <b>Instalar app</b> · se abre como app y funciona offline.</li>
+      </ol>
+      <p class="small muted" style="margin:8px 0 0">Atajo rápido (sin hosting): abre el archivo en Chrome → ⋮ → "Agregar a pantalla de inicio". Crea un acceso directo (puede no guardar los datos de forma permanente).</p>
+    </div>
+    <p class="small muted" style="text-align:center;margin:18px 0">Mi Rutina · hecha para Rodrigo 💚</p>
+  </div>
+</section>
+
+<div class="nav">
+  <button data-s="hoy" class="on"><span class="ni">📍</span>Hoy</button>
+  <button data-s="semana"><span class="ni">🗓️</span>Semana</button>
+  <button data-s="cuadro"><span class="ni">📊</span>Cuadro</button>
+  <button data-s="mas"><span class="ni">⋯</span>Más</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ===================== DATOS DE LA RUTINA ===================== */
+var START=new Date(2026,3,27), RACE=new Date(2026,10,29);  // 27-abr y 29-nov 2026
+var INTENSIVO_START=4, INTENSIVO_END=9;
+
+var WEEKS={
+ 1:{tue:4,wed:4,fri:5,lr:7,total:20,phase:"1. Base aeróbica",notes:"Construir hábito · trote conversacional"},
+ 2:{tue:5,wed:5,fri:5,lr:9,total:24,phase:"1. Base aeróbica",notes:"Aumentar volumen gradual"},
+ 3:{tue:5,wed:5,fri:6,lr:10,total:26,phase:"1. Base aeróbica",notes:"Consolidar base · LR 10 km"},
+ 4:{tue:4,wed:4,fri:5,lr:7,total:20,phase:"1. Base aeróbica",notes:"Descarga · ajuste calzado"},
+ 5:{tue:6,wed:5,fri:6,lr:12,total:29,phase:"1. Base aeróbica",notes:"Cierre fase base"},
+ 6:{tue:6,wed:6,fri:7,lr:14,total:33,phase:"2. Construcción",notes:"Primer LR > 14 km"},
+ 7:{tue:7,wed:6,fri:7,lr:15,total:35,phase:"2. Construcción",notes:"Volumen progresivo"},
+ 8:{tue:5,wed:5,fri:6,lr:11,total:27,phase:"2. Construcción",notes:"Descarga · fatiga"},
+ 9:{tue:7,wed:7,fri:8,lr:16,total:38,phase:"2. Construcción",notes:"Cierre construcción"},
+ 10:{tue:8,wed:7,fri:8,lr:18,total:41,phase:"3. Volumen",notes:"Introducir tempo runs"},
+ 11:{tue:8,wed:8,fri:8,lr:19,total:43,phase:"3. Volumen",notes:"Tempo a ritmo objetivo"},
+ 12:{tue:6,wed:6,fri:7,lr:14,total:33,phase:"3. Volumen",notes:"Descarga"},
+ 13:{tue:8,wed:8,fri:9,lr:20,total:45,phase:"3. Volumen",notes:"Cierre volumen · chequeo médico"},
+ 14:{tue:8,wed:8,fri:10,lr:22,total:48,phase:"3. Volumen",notes:"Intervalos pista 400-800"},
+ 15:{tue:9,wed:9,fri:10,lr:24,total:52,phase:"4. Fuerza específica",notes:"Series y cuestas"},
+ 16:{tue:7,wed:7,fri:8,lr:18,total:40,phase:"4. Fuerza específica",notes:"Descarga"},
+ 17:{tue:9,wed:9,fri:11,lr:26,total:55,phase:"4. Fuerza específica",notes:"Subida fuerte"},
+ 18:{tue:9,wed:9,fri:12,lr:28,total:58,phase:"4. Fuerza específica",notes:"Cierre fuerza"},
+ 19:{tue:8,wed:8,fri:9,lr:22,total:47,phase:"5. Pico",notes:"Descarga"},
+ 20:{tue:10,wed:10,fri:11,lr:30,total:61,phase:"5. Pico",notes:"LR 30 · simulacro nutrición"},
+ 21:{tue:9,wed:9,fri:12,lr:28,total:58,phase:"5. Pico",notes:"Descarga · pulir ritmo"},
+ 22:{tue:10,wed:10,fri:12,lr:32,total:64,phase:"5. Pico",notes:"LR 32 · máxima carga"},
+ 23:{tue:8,wed:8,fri:9,lr:24,total:49,phase:"6. Último empuje",notes:"Descarga"},
+ 24:{tue:10,wed:10,fri:11,lr:32,total:63,phase:"6. Último empuje",notes:"LR 32 · pre-pico"},
+ 25:{tue:10,wed:11,fri:12,lr:35,total:68,phase:"6. Último empuje",notes:"LR MÁXIMO 35 km"},
+ 26:{tue:8,wed:7,fri:10,lr:25,total:50,phase:"6. Último empuje",notes:"Descarga post-pico · chequeo médico"},
+ 27:{tue:9,wed:9,fri:10,lr:28,total:56,phase:"7. Taper",notes:"Mantener intensidad"},
+ 28:{tue:8,wed:8,fri:9,lr:24,total:49,phase:"7. Taper",notes:"Piernas frescas"},
+ 29:{tue:7,wed:7,fri:7,lr:18,total:39,phase:"7. Taper",notes:"Trotes cortos rápidos"},
+ 30:{tue:5,wed:5,fri:7,lr:12,total:29,phase:"7. Taper",notes:"Pre-carrera · enfoque mental"},
+ 31:{tue:4,wed:4,fri:4,lr:0,total:54,phase:"8. Semana de carrera",notes:"🏁 MARATÓN 42 km · Dom 29-nov"}
+};
+
+// Bloque: [inicio, fin, categoría, título, detalle, prioridad]
+var V={};
+V.lx=[
+ ["22:00","06:00","Sueño","Sueño principal","8 h · cuarto oscuro · sin pantallas 30 min antes","baja"],
+ ["06:00","06:15","Personal","🔔 Despertar + 🙏 devoción mini","Alarma 06:00 + backup 06:05 · celular fuera · 5 min Salmo + luz","media"],
+ ["06:15","06:45","Comida","🍳 Desayuno con Vero","Compartir antes de que salga al trabajo","media"],
+ ["06:45","07:15","Familia","🚗 Llevar a Vero al trabajo (FIJO)","30 min ida y vuelta","media"],
+ ["07:15","07:45","Familia","🐕 Pasear + asear a Quimey (FIJO)","Paseo 20 min + aseo 10 min","media"],
+ ["07:45","08:00","Personal","Ducha rápida + cambio","Express post-Quimey","baja"],
+ ["08:00","08:45","Personal","Tiempo personal / preparar T1","Café · revisar materiales del MIT","baja"],
+ ["08:45","09:00","Plan","Planificación del día","Revisar MIT + tareas · modo avión","alta"],
+ ["09:00","10:30","Trabajo","T1 — MIT (intocable)","Tarea más importante · sin interrupciones","alta"],
+ ["10:30","10:45","Personal","Pausa activa","Caminar · agua · respirar","baja"],
+ ["10:45","12:15","Trabajo","T2 — Trabajo profundo","Segunda tarea crítica","alta"],
+ ["12:15","12:30","Personal","Pausa activa","","baja"],
+ ["12:30","14:00","Trabajo","T3 — Trabajo profundo","Cierre y notas","alta"],
+ ["14:00","14:45","Comida","Almuerzo + caminata","Comida tranquila + caminata breve","media"],
+ ["14:45","16:15","Trabajo","T4 — Trabajo técnico","Revisión · cálculo · documentación","alta"],
+ ["16:15","16:30","Personal","Pausa activa","","baja"],
+ ["16:30","17:00","Trabajo","Correos y coordinación","Cierre de comunicaciones","media"],
+ ["17:00","18:00","Familia","🐕 Familia + Quimey PM (FIJO)","Paseo PM con Quimey + Vero · inamovible","media"],
+ ["18:00","19:00","Ejercicio","🧘 Ejercicio L/X (yoga lun · recovery mié)","Post-familia · 60 min","alta"],
+ ["19:00","19:45","Comida","Cena familiar","Sin pantallas · conversación con Vero","media"],
+ ["19:45","20:00","Estudio","🌐 Inglés técnico","Podcast/Duolingo/lectura · camino al PhD","media"],
+ ["20:00","21:00","Estudio","🔬 Estudio proyecto Q (PhD)","BID II / Paper IEEE · Base Conocimiento","alta"],
+ ["21:00","22:00","Bienestar","🧘 Yoga + 🙏 Devoción + Meditación","21:00 sin pantallas · 21:45 cama · 22:00 luz off · 4-7-8","baja"]
+];
+V.mjv=[
+ ["22:00","06:00","Sueño","Sueño principal","8 h · acostarse 22:00","baja"],
+ ["06:00","06:15","Personal","🔔 Despertar + 🙏 devoción mini","Alarma 06:00 + backup 06:05 · celular fuera · 5 min Salmo + luz","media"],
+ ["06:15","07:00","Ejercicio","💪 Ejercicio AM (gym mar/jue · calidad vie)","Sesión 45 min · gym express o intervalos","media"],
+ ["07:00","07:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","Paseo 20 min + aseo 10 min","media"],
+ ["07:30","07:45","Personal","Ducha + cooldown","Ducha rápida · estiramiento","baja"],
+ ["07:45","08:15","Comida","🍳 Desayuno con Vero","Con Vero antes de que salga · sin pantallas","media"],
+ ["08:15","08:45","Familia","🚗 Llevar a Vero al trabajo (FIJO)","Salir con Vero · 30 min total","media"],
+ ["08:45","09:00","Plan","Planificación del día","Revisar MIT + T2/T3/T4 · modo avión","alta"],
+ ["09:00","10:30","Trabajo","T1 — MIT (intocable)","Tarea más importante · sin interrupciones","alta"],
+ ["10:30","10:45","Personal","Pausa activa","","baja"],
+ ["10:45","12:15","Trabajo","T2 — Trabajo profundo","Segunda tarea crítica","alta"],
+ ["12:15","12:30","Personal","Pausa activa","","baja"],
+ ["12:30","14:00","Trabajo","T3 — Trabajo profundo","Cierre y notas","alta"],
+ ["14:00","14:45","Comida","Almuerzo + caminata","","media"],
+ ["14:45","16:15","Trabajo","T4 — Trabajo técnico","Revisión · cálculo · documentación","alta"],
+ ["16:15","16:30","Personal","Pausa activa","","baja"],
+ ["16:30","17:00","Trabajo","Correos y coordinación","Cierre de comunicaciones","media"],
+ ["17:00","18:00","Familia","🐕 Familia + Quimey PM (FIJO)","Caminata PM + Vero · inamovible","media"],
+ ["18:00","19:00","Familia","Familia (tiempo libre)","Conversación · juegos · proyectos casa","media"],
+ ["19:00","19:45","Comida","Cena familiar","💕 Viernes = DATE NIGHT con Vero (sin estudio)","media"],
+ ["19:45","20:00","Estudio","🌐 Inglés técnico","Podcast/Duolingo/lectura · camino al PhD","media"],
+ ["20:00","21:00","Estudio","🔬 Estudio proyecto Q (PhD)","BID II / Paper IEEE","alta"],
+ ["21:00","22:00","Bienestar","🧘 Yoga + 🙏 Devoción + Meditación","30 min yoga + 30 min devoción · cierre","baja"]
+];
+V.satInt=[
+ ["22:00","06:00","Sueño","Sueño principal","8 h","baja"],
+ ["06:00","06:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","Antes del LR","media"],
+ ["06:30","07:00","Personal","🙏 Devoción mini + warm-up + café","5 min Salmo + movilidad · gel pre-LR","media"],
+ ["07:00","09:45","Ejercicio","🏃 LONG RUN","Según fase · ritmo conversacional · gels c/5 km","alta"],
+ ["09:45","10:45","Personal","Ducha + recovery + brunch","Estiramiento · proteína post-LR","media"],
+ ["10:45","12:15","Familia","Familia + Quimey","Paseo · juegos · presencia con Vero","media"],
+ ["12:15","13:15","Comida","Almuerzo familiar","","media"],
+ ["13:15","14:15","Bienestar","🧘 Yoga Guiado","Clase 1 h · sesión semanal","alta"],
+ ["14:15","14:30","Personal","Transición + agua","","baja"],
+ ["14:30","16:00","Trabajo","🔥 T1 Sábado — Trabajo profundo","Paper IEEE o BID II","alta"],
+ ["16:00","16:15","Personal","Pausa activa","","baja"],
+ ["16:15","17:45","Trabajo","🔥 T2 Sábado — Trabajo profundo","Estudio profundo o documentación","alta"],
+ ["17:45","18:15","Familia","Familia + Quimey","Pausa antes de cena","media"],
+ ["18:15","19:00","Comida","Cena familiar","Sin pantallas","media"],
+ ["19:00","19:15","Estudio","🌐 Inglés técnico","15 min","media"],
+ ["19:15","20:45","Estudio","🔬 Estudio profundo (PhD)","Concepto + aplicación · Base Conocimiento","alta"],
+ ["20:45","21:30","Bienestar","🧘 Yoga + 🙏 Devoción PM","21:00 sin pantallas · 30 min yoga + 15 min meditación","baja"],
+ ["21:30","22:00","Plan","Plan del domingo + cierre","21:45 cama · 22:00 luz off · gratitud","baja"]
+];
+V.satNorm=[
+ ["22:00","06:00","Sueño","Sueño principal","8 h","baja"],
+ ["06:00","06:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","Antes del LR","media"],
+ ["06:30","07:00","Personal","🙏 Devoción mini + warm-up + café","5 min Salmo + activación","media"],
+ ["07:00","09:45","Ejercicio","🏃 LONG RUN","Según fase · ritmo conversacional","alta"],
+ ["09:45","11:15","Personal","Ducha + recovery + brunch","Proteína post-LR","media"],
+ ["11:15","12:15","Familia","Familia + Quimey","Paseo · presencia plena","media"],
+ ["12:15","13:15","Comida","Almuerzo familiar","","media"],
+ ["13:15","14:15","Bienestar","🧘 Yoga Guiado","Clase 1 h · sesión semanal","alta"],
+ ["14:15","16:45","Familia","Tiempo libre familia","Actividad elegida en familia","media"],
+ ["16:45","17:45","Personal","Descanso / siesta opcional","Recuperación","baja"],
+ ["17:45","18:45","Familia","Familia + juegos","","media"],
+ ["18:45","19:30","Comida","Cena familiar","","media"],
+ ["19:30","19:45","Estudio","🌐 Inglés técnico","15 min","media"],
+ ["19:45","20:30","Estudio","Lectura ligera (opcional)","Sin presión","baja"],
+ ["20:30","21:30","Bienestar","🧘 Yoga + 🙏 Devoción PM","30 min yoga + 30 min devoción","baja"],
+ ["21:30","22:00","Plan","Plan domingo + oración","21:45 cama · 22:00 luz off","baja"]
+];
+V.sunInt=[
+ ["22:00","06:30","Sueño","Sueño largo","8.5 h · recuperación máxima","baja"],
+ ["06:30","07:00","Personal","Despertar lento + ☕ + 🙏 devoción","5 min lectura espiritual + café","media"],
+ ["07:00","07:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","30 min","media"],
+ ["07:30","08:30","Ejercicio","Caminata familiar","Aire libre · puede ser con Quimey","media"],
+ ["08:30","09:00","Comida","Desayuno familiar","Brunch con Vero","media"],
+ ["09:00","10:30","Trabajo","🔥 T1 Domingo — Trabajo profundo","Paper IEEE o proyecto Q (PhD)","alta"],
+ ["10:30","10:45","Personal","Pausa activa","","baja"],
+ ["10:45","12:15","Trabajo","🔥 T2 Domingo — Trabajo profundo","Escritura técnica o análisis","alta"],
+ ["12:15","13:00","Comida","Almuerzo familiar","","media"],
+ ["13:00","16:00","Hogar","🏠 Tareas del hogar (3 h)","Limpieza · mantenimiento · proyectos","alta"],
+ ["16:00","17:00","Plan","📝 Revisión semanal","KPIs · reflexión + check de fatiga","alta"],
+ ["17:00","18:00","Plan","Plan de la semana siguiente","Definir MITs L-V + sáb/dom","alta"],
+ ["18:00","19:00","Familia","Familia","Tiempo tranquilo","media"],
+ ["19:00","19:45","Comida","Cena familiar","","media"],
+ ["19:45","20:30","Familia","Tiempo familiar nocturno","Lectura compartida con Vero","media"],
+ ["20:30","21:30","Bienestar","🧘 Yoga + 🙏 Devoción PM","30 min yoga + 30 min devoción","baja"],
+ ["21:30","22:00","Plan","Oración + plan lunes","21:45 cama · 22:00 luz off · misión","baja"]
+];
+V.sunNorm=[
+ ["22:00","06:30","Sueño","Sueño largo","8.5 h","baja"],
+ ["06:30","07:00","Personal","Despertar lento + ☕ + 🙏 devoción","5 min lectura espiritual + café","media"],
+ ["07:00","07:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","30 min","media"],
+ ["07:30","08:30","Ejercicio","Caminata familiar","Aire libre · caminata larga","media"],
+ ["08:30","09:30","Comida","Desayuno familiar amplio","Brunch sin reloj","media"],
+ ["09:30","11:00","Bienestar","Yoga regenerativo extenso","Foam roller · auto-masaje","baja"],
+ ["11:00","12:30","Familia","Actividad libre familia","","media"],
+ ["12:30","13:30","Comida","Almuerzo familiar","Comida especial","media"],
+ ["13:30","16:30","Hogar","🏠 Tareas del hogar (3 h)","Limpieza · mantenimiento","alta"],
+ ["16:30","17:30","Plan","📝 Revisión semanal","KPIs · reflexión","alta"],
+ ["17:30","19:00","Plan","Plan de la semana","Definir MITs · cronograma","alta"],
+ ["19:00","19:45","Comida","Cena familiar","","media"],
+ ["19:45","20:30","Familia","Tiempo familiar nocturno","","media"],
+ ["20:30","21:30","Bienestar","🧘 Yoga + 🙏 Devoción PM","30 min yoga + 30 min devoción","baja"],
+ ["21:30","22:00","Plan","Oración + plan lunes","Gratitud · misión","baja"]
+];
+V.satServ=[
+ ["22:00","06:00","Sueño","Sueño principal","8 h","baja"],
+ ["06:00","06:30","Familia","🐕 Pasear + asear a Quimey (FIJO)","","media"],
+ ["06:30","07:00","Personal","🙏 Devoción mini + warm-up + café","","media"],
+ ["07:00","09:45","Ejercicio","🏃 LONG RUN","Según fase","alta"],
+ ["09:45","10:45","Personal","Ducha + recovery + brunch","Proteína post-LR","media"],
+ ["10:45","12:15","Familia","Familia + Quimey","Paseo · presencia plena","media"],
+ ["12:15","13:15","Comida","Almuerzo familiar","","media"],
+ ["13:15","14:15","Bienestar","🧘 Yoga Guiado","Clase 1 h","alta"],
+ ["14:15","15:00","Trabajo","T1 Sábado breve (45 min)","MIT comprimida antes de servicio","alta"],
+ ["15:00","17:00","Servicio","🤲 SERVICIO (mentoría/voluntariado)","IEEE Ecuador · ayuda técnica a la comunidad","alta"],
+ ["17:00","17:15","Personal","Pausa + transición","","baja"],
+ ["17:15","18:00","Familia","Familia + Quimey","Compartir cómo te fue","media"],
+ ["18:00","18:45","Comida","Cena familiar","","media"],
+ ["18:45","19:00","Estudio","🌐 Inglés técnico","15 min","media"],
+ ["19:00","20:30","Estudio","🔬 Estudio profundo (PhD)","","alta"],
+ ["20:30","21:30","Bienestar","🧘 Yoga + 🙏 Devoción PM","30 min yoga + 30 min devoción","baja"],
+ ["21:30","22:00","Plan","Plan domingo + gratitud servicio","¿A quién serviste hoy?","baja"]
+];
+
+var CAT={
+ "Sueño":{i:"💤",c:"#90A4AE"},"Personal":{i:"🧴",c:"#B0BEC5"},"Comida":{i:"🍽️",c:"#FFB74D"},
+ "Familia":{i:"❤️",c:"#EC407A"},"Ejercicio":{i:"🏃",c:"#26A69A"},"Bienestar":{i:"🧘",c:"#9575CD"},
+ "Estudio":{i:"📚",c:"#42A5F5"},"Trabajo":{i:"🔥",c:"#FF7043"},"Hogar":{i:"🏠",c:"#8D6E63"},
+ "Servicio":{i:"🤲",c:"#5C9CE0"},"Plan":{i:"🗒️",c:"#78909C"}
+};
+var DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+var DIAS3=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
+var MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+var HABITS=[
+ {id:"despertar",t:"Despertar 06:00 + devoción",s:"5 min Salmo · luz natural",i:"🔔",pillar:"fe"},
+ {id:"quimey",t:"Pasear / asear a Quimey",s:"paseo + aseo",i:"🐕",pillar:"familia"},
+ {id:"entreno",t:"Entrenamiento del día",s:"según plan de maratón",i:"🏃",pillar:"salud",dyn:true},
+ {id:"familia",t:"Tiempo con Vero / familia",s:"17:00 PM · inamovible",i:"❤️",pillar:"familia"},
+ {id:"ingles",t:"Inglés 15 min",s:"podcast · lectura · Duolingo",i:"🌐",pillar:"ingles"},
+ {id:"estudio",t:"Estudio PhD / trabajo profundo",s:"BID II · Paper IEEE",i:"🔬",pillar:"phd"},
+ {id:"nocturno",t:"Ritual nocturno 22:00",s:"21:00 sin pantallas · luz off",i:"🌙",pillar:"fe"}
+];
+var PILLARS={
+ fe:{t:"Fe & Servicio",c:"var(--fe)",i:"🙏"},familia:{t:"Familia (Vero + Quimey)",c:"var(--familia)",i:"❤️"},
+ salud:{t:"Salud & Maratón",c:"var(--salud)",i:"🏃"},phd:{t:"PhD & Conocimiento",c:"var(--phd)",i:"🔬"},
+ ingles:{t:"Inglés",c:"var(--ingles)",i:"🌐"}
+};
+var READING=[
+ "May–Jun: Bergen & Vittal — <i>Power Systems Analysis</i>",
+ "Jul–Ago: Wood & Wollenberg — <i>Power Generation, Operation & Control</i>",
+ "Sep–Oct: Kundur — <i>Power System Stability and Control</i>",
+ "Nov–Dic: Glover & Sarma — <i>Power System Analysis & Design</i>",
+ "2027: papers IEEE Transactions on Power Systems"
+];
+var RITUALS=[
+ "🔔 <b>Despertar</b> · alarma 06:00 + backup 06:05 · celular FUERA del cuarto desde 21:30 · luz natural",
+ "🌙 <b>Nocturno</b> · 21:00 sin pantallas · 21:30 luces tenues · 21:45 cama · 22:00 LUZ OFF",
+ "💕 <b>Viernes</b> = date night con Vero 19:00–21:00 (sin estudio)",
+ "🤲 <b>Servicio</b> · 1 sábado/mes 15:00–17:00 (mentoría · IEEE Ecuador)",
+ "🩺 <b>Chequeo médico</b> cada 13 semanas (Sem 13 · Sem 26 · post-maratón)",
+ "📖 <b>Lectura inglés</b> · 1 libro técnico cada 2 meses"
+];
+
+/* ===================== UTILIDADES ===================== */
+function pad(n){return (n<10?"0":"")+n;}
+function toMin(hm){var p=hm.split(":");return (+p[0])*60+(+p[1]);}
+function dOnly(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+function key(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function dayDiff(a,b){return Math.round((dOnly(a)-dOnly(b))/86400000);}
+function weekFor(d){var n=Math.floor(dayDiff(d,START)/7)+1;return n;}
+function isIntensivo(d){var w=weekFor(d);return w>=INTENSIVO_START&&w<=INTENSIVO_END;}
+function isRace(d){return key(d)===key(RACE);}
+
+var DB=loadDB();
+function loadDB(){
+ try{var s=localStorage.getItem("miRutina_v1");if(s)return JSON.parse(s);}catch(e){}
+ return {log:{},settings:{},serviceSats:{}};
+}
+function saveDB(){try{localStorage.setItem("miRutina_v1",JSON.stringify(DB));}catch(e){}}
+function dayLog(k){if(!DB.log[k])DB.log[k]={h:{},b:{}};if(!DB.log[k].h)DB.log[k].h={};if(!DB.log[k].b)DB.log[k].b={};return DB.log[k];}
+
+function isServiceSat(d){return !!DB.serviceSats[key(d)];}
+function variantKey(d){
+ var wd=d.getDay();
+ if(wd===1||wd===3)return "lx";
+ if(wd===2||wd===4||wd===5)return "mjv";
+ if(wd===6)return isServiceSat(d)?"satServ":(isIntensivo(d)?"satInt":"satNorm");
+ return isIntensivo(d)?"sunInt":"sunNorm";
+}
+var VLABEL={lx:"Lun/Mié",mjv:"Mar/Jue/Vie",satInt:"Sáb intensivo",satNorm:"Sábado",satServ:"Sáb servicio",sunInt:"Dom intensivo",sunNorm:"Domingo"};
+
+function training(d){
+ if(isRace(d))return {ic:"🏁",t:"MARATÓN Santo Domingo",note:"42.195 km — ¡el gran día!",km:"42.2 km"};
+ var wd=d.getDay(),cfg=WEEKS[weekFor(d)]||{};
+ if(wd===1)return {ic:"🧘",t:"Yoga (caderas/isquios)",note:"recuperación activa · PM 18:00",km:"60 min"};
+ if(wd===2)return {ic:"🏃",t:"Correr easy + 💪 Gym superior",note:"AM 06:15 · pecho/espalda/hombros",km:(cfg.tue||0)+" km"};
+ if(wd===3)return {ic:"🏃",t:"Recovery suave",note:"PM 18:00 · muy fácil",km:(cfg.wed||0)+" km"};
+ if(wd===4)return {ic:"💪",t:"Gym piernas + core",note:"AM 06:15 · sentadilla/peso muerto",km:"45 min"};
+ if(wd===5)return {ic:"🏃",t:"Calidad (tempo/intervalos)",note:"AM 06:15 · sesión clave",km:(cfg.fri||0)+" km"};
+ if(wd===6){var lr=cfg.lr||0;return lr>0?{ic:"🏃",t:"LONG RUN",note:"AM 07:00 · sesión más importante",km:lr+" km"}:{ic:"🏃",t:"Trote corto pre-race",note:"suave",km:"4 km"};}
+ return {ic:"🧘",t:"Yoga regenerativo / descanso",note:"caminata familiar AM",km:"45 min"};
+}
+
+/* ===================== ESTADO / NAVEGACIÓN ===================== */
+var curScreen="hoy";
+function go(s){
+ curScreen=s;
+ var secs=document.querySelectorAll(".screen");for(var i=0;i<secs.length;i++)secs[i].classList.remove("on");
+ document.getElementById("s-"+s).classList.add("on");
+ var btns=document.querySelectorAll(".nav button");for(var j=0;j<btns.length;j++)btns[j].classList.toggle("on",btns[j].getAttribute("data-s")===s);
+ window.scrollTo(0,0);
+ if(s==="semana")renderSemana();if(s==="cuadro")renderCuadro();if(s==="mas")renderMas();
+}
+var navBtns=document.querySelectorAll(".nav button");
+for(var i=0;i<navBtns.length;i++)navBtns[i].addEventListener("click",function(){go(this.getAttribute("data-s"));});
+
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},1800);}
+
+/* ===================== HOY ===================== */
+function curBlocks(){return V[variantKey(new Date())];}
+function renderHoy(){
+ var now=new Date(),nowM=now.getHours()*60+now.getMinutes(),k=key(now);
+ var hr=now.getHours();
+ document.getElementById("h-greet").textContent=(hr<12?"Buenos días":hr<19?"Buenas tardes":"Buenas noches")+", Rodrigo";
+ document.getElementById("h-date").textContent=DIAS[now.getDay()]+", "+now.getDate()+" de "+MESES[now.getMonth()];
+ var cd=dayDiff(RACE,now);
+ document.getElementById("h-count").textContent=cd>=0?cd:"🏁";
+ var wf=weekFor(now);
+ document.getElementById("h-week").textContent=(wf>=1&&wf<=31)?("Sem "+wf):"—";
+ document.getElementById("h-phase").textContent=(WEEKS[wf]?WEEKS[wf].phase.replace(/^\d+\.\s*/,""):"plan maratón");
+ document.getElementById("h-variant").textContent=VLABEL[variantKey(now)];
+
+ // entrenamiento
+ var tr=training(now);
+ document.getElementById("tr-ic").textContent=tr.ic;
+ document.getElementById("tr-t").textContent=tr.t;
+ document.getElementById("tr-note").textContent=tr.note;
+ document.getElementById("tr-km").textContent=tr.km;
+
+ // bloque AHORA
+ var blocks=curBlocks(),cur=null,nxt=null;
+ // ordenar lógicamente: encontrar bloque actual recorriendo
+ for(var i=0;i<blocks.length;i++){
+   var s=toMin(blocks[i][0]),e=toMin(blocks[i][1]);
+   var inside=(e<=s)?(nowM>=s||nowM<e):(nowM>=s&&nowM<e);
+   if(inside){cur=i;break;}
+ }
+ // siguiente bloque = primer bloque cuyo inicio > ahora (mismo día)
+ var bestDiff=99999;
+ for(var j=0;j<blocks.length;j++){
+   var sj=toMin(blocks[j][0]);var diff=sj-nowM;if(diff<0)diff+=1440;
+   if(diff>0&&diff<bestDiff&&j!==cur){bestDiff=diff;nxt=j;}
+ }
+ var nc=document.getElementById("nowCard");
+ if(cur!==null){
+   var b=blocks[cur],s=toMin(b[0]),e=toMin(b[1]);
+   var tot=(e<=s)?((1440-s)+e):(e-s);
+   var el=(e<=s)?((nowM>=s)?(nowM-s):(1440-s+nowM)):(nowM-s);
+   var rem=tot-el;
+   document.getElementById("now-title").textContent=b[3];
+   document.getElementById("now-time").textContent=b[0]+" – "+b[1]+"  ·  "+CAT[b[2]].i+" "+b[2];
+   document.getElementById("now-det").textContent=b[4]||"";
+   document.getElementById("now-bar").style.width=Math.min(100,Math.round(el/tot*100))+"%";
+   document.getElementById("now-rem").textContent=Math.max(0,rem)+" min restantes";
+ }else{
+   document.getElementById("now-title").textContent="Tiempo libre";
+   document.getElementById("now-time").textContent="Sin bloque programado";
+   document.getElementById("now-det").textContent="";
+   document.getElementById("now-bar").style.width="0";
+   document.getElementById("now-rem").textContent="";
+ }
+ document.getElementById("now-next").textContent=nxt!==null?(blocks[nxt][0]+" "+blocks[nxt][3]):"—";
+
+ // hábitos
+ var dl=dayLog(k),hl=document.getElementById("habitList"),html="";
+ for(var h=0;h<HABITS.length;h++){
+   var H=HABITS[h],done=!!dl.h[H.id];
+   var sub=H.dyn?(tr.t+" · "+tr.km):H.s;
+   html+='<div class="habit'+(done?' done':'')+'" data-h="'+H.id+'"><span class="hic">'+H.i+'</span>'+
+         '<span class="ht">'+H.t+'<small>'+sub+'</small></span><span class="check">'+(done?'✓':'')+'</span></div>';
+ }
+ hl.innerHTML=html;
+ var hb=hl.querySelectorAll(".habit");
+ for(var hi=0;hi<hb.length;hi++)hb[hi].addEventListener("click",function(){
+   var id=this.getAttribute("data-h"),L=dayLog(key(new Date()));
+   L.h[id]=!L.h[id];if(!L.h[id])delete L.h[id];saveDB();renderHoy();
+ });
+ var done=0;for(var c=0;c<HABITS.length;c++)if(dl.h[HABITS[c].id])done++;
+ var pct=Math.round(done/HABITS.length*100);
+ document.getElementById("day-pct").textContent=pct;
+ document.getElementById("day-frac").textContent=done+"/"+HABITS.length;
+ var circ=2*Math.PI*27;document.getElementById("ringArc").style.strokeDasharray=circ;
+ document.getElementById("ringArc").style.strokeDashoffset=circ*(1-done/HABITS.length);
+
+ // timeline
+ document.getElementById("ag-variant").textContent="· "+VLABEL[variantKey(now)];
+ var tl=document.getElementById("timeline"),th="";
+ for(var t=0;t<blocks.length;t++){
+   var bb=blocks[t],sm=toMin(bb[0]),em=toMin(bb[1]);
+   var inside=(em<=sm)?(nowM>=sm||nowM<em):(nowM>=sm&&nowM<em);
+   var past=!inside&&((em<=sm)?(nowM>=em&&nowM<sm):(nowM>=em));
+   var bdone=!!dl.b[t];
+   var cls="blk"+(inside?" cur":"")+(past?" past":"")+(bdone?" bdone":"");
+   th+='<div class="'+cls+'" data-b="'+t+'"><span class="tm">'+bb[0]+'</span>'+
+       '<span class="dot" style="background:'+CAT[bb[2]].c+'"></span>'+
+       '<span class="bt">'+bb[3]+(inside?'<span class="nowtag">ahora</span>':'')+(bb[4]?'<small>'+bb[4]+'</small>':'')+'</span>'+
+       '<span class="bchk">'+(bdone?'✓':'○')+'</span></div>';
+ }
+ tl.innerHTML=th;
+ var blkEls=tl.querySelectorAll(".blk");
+ for(var be=0;be<blkEls.length;be++)blkEls[be].addEventListener("click",function(){
+   var idx=this.getAttribute("data-b"),L=dayLog(key(new Date()));
+   L.b[idx]=!L.b[idx];if(!L.b[idx])delete L.b[idx];saveDB();renderHoy();
+ });
+}
+
+/* ===================== SEMANA ===================== */
+function mondayOf(d){var x=dOnly(d);var wd=(x.getDay()+6)%7;return addDays(x,-wd);}
+function renderSemana(){
+ var now=new Date(),mon=mondayOf(now),wf=weekFor(now),cfg=WEEKS[wf]||{};
+ document.getElementById("wk-range").textContent=mon.getDate()+" "+MESES[mon.getMonth()].slice(0,3)+" – "+addDays(mon,6).getDate()+" "+MESES[addDays(mon,6).getMonth()].slice(0,3);
+ document.getElementById("wk-num").textContent=(wf>=1&&wf<=31)?wf:"—";
+ document.getElementById("wk-km").textContent=(cfg.total||"—");
+ document.getElementById("wk-lr").textContent=(cfg.lr?cfg.lr+" km":"—");
+ document.getElementById("wk-phasebadge").textContent=cfg.phase||"Fuera del plan";
+ document.getElementById("wk-notes").textContent=cfg.notes||"";
+ var wl=document.getElementById("weekList"),html="";
+ for(var i=0;i<7;i++){
+   var d=addDays(mon,i),tr=training(d),isT=key(d)===key(now);
+   html+='<div class="wday'+(isT?' today':'')+'"><div class="d"><b>'+d.getDate()+'</b><small>'+DIAS3[d.getDay()]+'</small></div>'+
+         '<div class="act">'+tr.ic+' '+tr.t+'<small>'+VLABEL[variantKey(d)]+'</small></div>'+
+         '<div class="dist">'+tr.km+'</div></div>';
+ }
+ wl.innerHTML=html;
+ var sc=document.getElementById("servChk"),satThis=addDays(mon,5);
+ function paintServ(){sc.style.background=isServiceSat(satThis)?"var(--salud)":"";sc.style.borderColor=isServiceSat(satThis)?"var(--salud)":"";sc.textContent=isServiceSat(satThis)?"✓":"";}
+ paintServ();
+ sc.parentElement.onclick=function(){var kk=key(satThis);if(DB.serviceSats[kk])delete DB.serviceSats[kk];else DB.serviceSats[kk]=1;saveDB();paintServ();toast("Sábado actualizado");};
+}
+
+/* ===================== CUADRO DE MANDO ===================== */
+function dayScore(d){var L=DB.log[key(d)];if(!L||!L.h)return 0;var n=0;for(var i=0;i<HABITS.length;i++)if(L.h[HABITS[i].id])n++;return n/HABITS.length;}
+function meets(d){return dayScore(d)>=0.7;}
+function renderCuadro(){
+ var now=new Date();
+ // racha
+ var streak=0,d=new Date(now);
+ if(meets(now)){streak++;d=addDays(now,-1);}else{d=addDays(now,-1);}
+ while(meets(d)){streak++;d=addDays(d,-1);}
+ document.getElementById("st-streak").textContent=streak;
+ // mejor racha (busca 180 días atrás)
+ var best=0,run=0;for(var i=180;i>=0;i--){if(meets(addDays(now,-i))){run++;if(run>best)best=run;}else run=0;}
+ document.getElementById("st-best").textContent=Math.max(best,streak);
+ // semana
+ var mon=mondayOf(now),sw=0,cw=0;for(var w=0;w<7;w++){var dd=addDays(mon,w);if(dayDiff(dd,now)>0)break;sw+=dayScore(dd);cw++;}
+ document.getElementById("st-week").textContent=(cw?Math.round(sw/cw*100):0)+"%";
+ // mes
+ var sm=0,cm=0;for(var m=1;m<=now.getDate();m++){sm+=dayScore(new Date(now.getFullYear(),now.getMonth(),m));cm++;}
+ document.getElementById("st-month").textContent=(cm?Math.round(sm/cm*100):0)+"%";
+ // pilares (semana)
+ var pl=document.getElementById("pillars"),html="";
+ for(var pk in PILLARS){
+   var ids=[];for(var hh=0;hh<HABITS.length;hh++)if(HABITS[hh].pillar===pk)ids.push(HABITS[hh].id);
+   var got=0,tot=0;
+   for(var ww=0;ww<7;ww++){var dd2=addDays(mon,ww);if(dayDiff(dd2,now)>0)break;var L=DB.log[key(dd2)];for(var ii=0;ii<ids.length;ii++){tot++;if(L&&L.h&&L.h[ids[ii]])got++;}}
+   var p=tot?Math.round(got/tot*100):0;
+   html+='<div class="pbar"><div class="lab"><span>'+PILLARS[pk].i+' '+PILLARS[pk].t+'</span><span>'+p+'%</span></div>'+
+         '<div class="track"><i style="width:'+p+'%;background:'+PILLARS[pk].c+'"></i></div></div>';
+ }
+ pl.innerHTML=html;
+ // maratón
+ var wf=weekFor(now),cfg=WEEKS[wf];
+ document.getElementById("mar-phase").textContent=cfg?cfg.phase:"Fuera del plan";
+ document.getElementById("mar-week").textContent=(wf>=1&&wf<=31)?("Semana "+wf+" de 31 · "+(cfg?cfg.notes:"")):"El plan corre del 27-abr al 29-nov-2026";
+ var pctMar=Math.max(0,Math.min(100,Math.round((wf-0)/31*100)));if(wf<1)pctMar=0;if(wf>31)pctMar=100;
+ document.getElementById("mar-pct").textContent=pctMar+"%";
+ document.getElementById("mar-bar").style.width=pctMar+"%";
+ var nextSat=addDays(mondayOf(now),5);if(dayDiff(nextSat,now)<0)nextSat=addDays(nextSat,7);
+ var lrcfg=WEEKS[weekFor(nextSat)];
+ document.getElementById("mar-next").textContent=lrcfg&&lrcfg.lr?("Próximo long run: "+lrcfg.lr+" km · sáb "+nextSat.getDate()+" "+MESES[nextSat.getMonth()].slice(0,3)):"Sin long run programado";
+ // heatmap 8 semanas (56 días, termina hoy)
+ var ht=document.getElementById("heat"),hh2="";
+ for(var hday=55;hday>=0;hday--){var dd3=addDays(now,-hday);var sc2=dayScore(dd3);var col= sc2>=0.99?"#11998e":sc2>=0.7?"#52c98f":sc2>=0.4?"#a8e6c4":sc2>0?"#d9f3e4":"#e9efef";hh2+='<div class="c" title="'+key(dd3)+'" style="background:'+col+'"></div>';}
+ ht.innerHTML=hh2;
+}
+
+/* ===================== MÁS ===================== */
+function renderMas(){
+ document.getElementById("readList").innerHTML="• "+READING.join("<br>• ");
+ document.getElementById("ritualList").innerHTML=RITUALS.join('<div style="height:7px"></div>');
+}
+
+/* notificaciones (mientras la app está abierta) */
+var notifTimers=[];
+function clearTimers(){for(var i=0;i<notifTimers.length;i++)clearTimeout(notifTimers[i]);notifTimers=[];}
+function scheduleNotifs(){
+ clearTimers();
+ if(!("Notification" in window)||Notification.permission!=="granted")return;
+ var now=new Date(),nowM=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+ var blocks=curBlocks();
+ for(var i=0;i<blocks.length;i++){
+   var sm=toMin(blocks[i][0]);if(sm<=nowM)continue;var ms=(sm-nowM)*60000;
+   if(ms>0&&ms<86400000){(function(b){notifTimers.push(setTimeout(function(){try{new Notification("Ahora: "+b[3],{body:b[0]+"–"+b[1]+" · "+b[4],icon:"icon-192.png"});}catch(e){}},ms));})(blocks[i]);}
+ }
+}
+document.getElementById("btnNotif").addEventListener("click",function(){
+ if(!("Notification" in window)){toast("Tu navegador no soporta avisos");return;}
+ Notification.requestPermission().then(function(p){if(p==="granted"){scheduleNotifs();toast("Avisos activados ✓");try{new Notification("Mi Rutina",{body:"Te avisaré en cada bloque mientras la app esté abierta.",icon:"icon-192.png"});}catch(e){}}else toast("Permiso de avisos denegado");});
+});
+
+/* .ics export */
+function pad2(n){return (n<10?"0":"")+n;}
+function icsEsc(t){return String(t).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r\n|\n|\r/g,"\\n");}
+function icsFold(l){
+ var enc=new TextEncoder();
+ if(enc.encode(l).length<=75)return l;
+ var out="",cur="",n=0,chars=Array.from(l),bl;
+ for(var i=0;i<chars.length;i++){
+   bl=enc.encode(chars[i]).length;
+   if(n+bl>75){out+=(out?"\r\n ":"")+cur;cur=chars[i];n=bl+1;}
+   else{cur+=chars[i];n+=bl;}
+ }
+ out+=(out?"\r\n ":"")+cur;
+ return out;
+}
+function buildICS(){
+ // eventos semanales recurrentes con alarma -5 min para bloques clave de un día tipo
+ var BYDAY=["SU","MO","TU","WE","TH","FR","SA"];
+ var keyTitlesByVar={
+   lx:["🔔 Despertar","🐕 Pasear","🐕 Familia","🧘 Ejercicio","🌐 Inglés","🔬 Estudio","🧘 Yoga"],
+   mjv:["🔔 Despertar","💪 Ejercicio","🐕 Pasear","🐕 Familia","🌐 Inglés","🔬 Estudio","🧘 Yoga"],
+   satNorm:["🐕 Pasear","🏃 LONG RUN","🧘 Yoga Guiado"],
+   sunNorm:["🐕 Pasear","Caminata","📝 Revisión"]
+ };
+ var dayVar={1:"lx",2:"mjv",3:"lx",4:"mjv",5:"mjv",6:"satNorm",0:"sunNorm"};
+ var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//MiRutina//ES","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Mi Rutina",
+   "BEGIN:VTIMEZONE","TZID:America/Guayaquil","BEGIN:STANDARD","DTSTART:19700101T000000","TZOFFSETFROM:-0500","TZOFFSETTO:-0500","TZNAME:-05","END:STANDARD","END:VTIMEZONE"];
+ var nw=new Date();
+ var stamp=nw.getUTCFullYear()+pad2(nw.getUTCMonth()+1)+pad2(nw.getUTCDate())+"T"+pad2(nw.getUTCHours())+pad2(nw.getUTCMinutes())+pad2(nw.getUTCSeconds())+"Z";
+ var ref=new Date(2026,5,1); // ancla en lunes 1-jun-2026
+ var monRef=mondayOf(ref);
+ var uid=0;
+ for(var wd=0;wd<7;wd++){
+   var vk=dayVar[wd],wanted=keyTitlesByVar[vk]||[],blocks=V[vk];
+   var dateForDay=addDays(monRef,(wd===0?6:wd-1)); // el día con weekday=wd
+   for(var b=0;b<blocks.length;b++){
+     var match=false;for(var q=0;q<wanted.length;q++)if(blocks[b][3].indexOf(wanted[q])>=0){match=true;break;}
+     if(!match)continue;
+     var smin=toMin(blocks[b][0]),emin=toMin(blocks[b][1]);
+     if(emin<=smin)emin=smin+30;
+     var endDate=dateForDay;if(emin>=1440){endDate=addDays(dateForDay,1);emin-=1440;}
+     var dtS=dateForDay.getFullYear()+pad2(dateForDay.getMonth()+1)+pad2(dateForDay.getDate());
+     var dtE=endDate.getFullYear()+pad2(endDate.getMonth()+1)+pad2(endDate.getDate());
+     var sh=pad2(Math.floor(smin/60)),sm=pad2(smin%60),eh=pad2(Math.floor(emin/60)),em=pad2(emin%60);
+     uid++;
+     lines.push("BEGIN:VEVENT");
+     lines.push("UID:rutina-"+wd+"-"+uid+"@mirutina");
+     lines.push("DTSTAMP:"+stamp);
+     lines.push("DTSTART;TZID=America/Guayaquil:"+dtS+"T"+sh+sm+"00");
+     lines.push("DTEND;TZID=America/Guayaquil:"+dtE+"T"+eh+em+"00");
+     lines.push("RRULE:FREQ=WEEKLY;BYDAY="+BYDAY[wd]);
+     lines.push("SUMMARY:"+icsEsc(blocks[b][3]));
+     if(blocks[b][4])lines.push("DESCRIPTION:"+icsEsc(blocks[b][4]));
+     lines.push("BEGIN:VALARM","TRIGGER:-PT5M","ACTION:DISPLAY","DESCRIPTION:"+icsEsc(blocks[b][3]),"END:VALARM");
+     lines.push("END:VEVENT");
+   }
+ }
+ lines.push("END:VCALENDAR");
+ var folded=[];for(var i=0;i<lines.length;i++)folded.push(icsFold(lines[i]));
+ return folded.join("\r\n")+"\r\n";
+}
+function download(name,text,type){
+ var blob=new Blob([text],{type:type||"text/plain"});var url=URL.createObjectURL(blob);
+ var a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();
+ setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
+}
+document.getElementById("btnIcs").addEventListener("click",function(){download("Mi_Rutina.ics",buildICS(),"text/calendar");toast("Calendario exportado · ábrelo para importar");});
+
+/* respaldo / restaurar / reset */
+document.getElementById("btnExport").addEventListener("click",function(){download("MiRutina_respaldo_"+key(new Date())+".json",JSON.stringify(DB),"application/json");toast("Respaldo descargado");});
+document.getElementById("btnImport").addEventListener("click",function(){document.getElementById("fileImport").click();});
+document.getElementById("fileImport").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);DB=o;if(!DB.log)DB.log={};if(!DB.serviceSats)DB.serviceSats={};saveDB();toast("Datos restaurados ✓");refresh();}catch(err){toast("Archivo no válido");}};r.readAsText(f);});
+document.getElementById("btnReset").addEventListener("click",function(){if(confirm("¿Borrar todo tu historial? Esta acción no se puede deshacer.")){DB={log:{},settings:{},serviceSats:{}};saveDB();toast("Historial borrado");refresh();}});
+
+/* ===================== ARRANQUE ===================== */
+function refresh(){if(curScreen==="cuadro")renderCuadro();else if(curScreen==="semana")renderSemana();else if(curScreen==="mas")renderMas();else renderHoy();}
+var lastDayKey=key(new Date());
+function tick(){
+ if(curScreen==="hoy")renderHoy();
+ var nk=key(new Date());
+ if(nk!==lastDayKey){lastDayKey=nk;scheduleNotifs();if(curScreen!=="hoy")renderHoy();}
+}
+renderHoy();
+setInterval(tick,30000); // refresca el bloque "ahora" cada 30 s
+scheduleNotifs();
+document.addEventListener("visibilitychange",function(){if(!document.hidden){renderHoy();scheduleNotifs();}});
+
+/* service worker (solo si está alojado en http/https) */
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+ navigator.serviceWorker.register("sw.js").catch(function(){});
+}
+</script>
+</body>
+</html>
