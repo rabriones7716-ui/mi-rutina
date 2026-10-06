@@ -181,8 +181,8 @@ def media_after(cap_prefix,min_idx=200):
             if '<w:drawing' in x[ps[k][0]:ps[k][1]]:
                 rid=re.search(r'r:embed="([^"]+)"',x[ps[k][0]:ps[k][1]]).group(1); return 'word/'+rel[rid]
     raise Exception('sin imagen para '+cap_prefix)
-def set_media(cap_prefix,png):
-    m=media_after(cap_prefix); MEDIA[m]=open(png,'rb').read(); log.append((cap_prefix,m,png))
+def set_media(cap_prefix,png,min_idx=200):
+    m=media_after(cap_prefix,min_idx); MEDIA[m]=open(png,'rb').read(); log.append((cap_prefix,m,png))
 def save2(dst,doc,clean):
     zs=zipfile.ZipFile(SRC)
     drop={n for n in zs.namelist() if clean and (re.match(r'word/comments(Extended|Ids|Extensible)?\.xml$',n) or re.match(r'word/_rels/comments',n))}
@@ -196,6 +196,8 @@ def save2(dst,doc,clean):
             elif n=='word/_rels/document.xml.rels' and clean: d=re.sub(rb'<Relationship\b[^>]*Target="comments[^"]*"[^>]*/>',b'',d)
             elif n=='[Content_Types].xml' and clean: d=re.sub(rb'<Override\b[^>]*PartName="/word/comments[^"]*"[^>]*/>',b'',d)
             elif n=='word/settings.xml' and clean: d=re.sub(rb'<w:trackRevisions\b[^>]*/>',b'',d)
+            elif clean and re.match(r'word/(footnotes|endnotes|header\d*|footer\d*)\.xml$',n) and (b'<w:ins ' in d or b'<w:del ' in d):
+                d=strip_comments(accept_all(d.decode('utf8'))[0]).encode('utf8')
             zo.writestr(it,d)
 def finish(cc,cl,RES,logfile):
     xml.parsers.expat.ParserCreate().Parse(x.encode('utf8'),True)
@@ -211,3 +213,44 @@ def insert_after_contains(substr,block):
     global x
     ps=all_paras(x); c=[j for j,(a,b) in enumerate(ps) if substr in vis_text(x[a:b])]
     assert len(c)==1,(substr[:50],len(c)); e=ps[c[0]][1]; x=x[:e]+block+x[e:]; log.append((f'inserción tras «{substr[:40]}»','',vis_text(block)[:300]))
+def delete_para(i,occ=None):
+    global x
+    j=raw_index_by_text(A[i],occ); x=del_para(x,ctx,j,AUT); log.append((i,A[i][:80],'(párrafo eliminado)'))
+def new_p_from(i,text,bold_prefix=None,occ=None,keep_highlight=False):
+    """Párrafo nuevo (insertado) con el pPr y el rPr del primer run del párrafo A[i]."""
+    j=raw_index_by_text(A[i],occ); ps=all_paras(x); p=_clean(x[ps[j][0]:ps[j][1]])
+    h=re.match(r'<w:p\b[^>]*>',p).end(); ppr=''
+    if p.startswith('<w:pPr>',h): ppr=p[h:balanced_end(p,h,'w:pPr')]
+    m=re.search(r'<w:r\b[^>]*>\s*(<w:rPr>.*?</w:rPr>)?',p[h+len(ppr):],flags=re.S); rpr=(m.group(1) or '') if m else ''
+    if not keep_highlight: rpr=re.sub(r'<w:highlight [^>]*/>','',rpr)
+    runs=''
+    if bold_prefix:
+        brpr=rpr.replace('</w:rPr>','<w:b/></w:rPr>') if rpr else '<w:rPr><w:b/></w:rPr>'
+        runs+=f'<w:r>{brpr}<w:t xml:space="preserve">{html.escape(bold_prefix,quote=False)}</w:t></w:r>'
+    runs+=f'<w:r>{rpr}<w:t xml:space="preserve">{html.escape(text,quote=False)}</w:t></w:r>'
+    np_='<w:p>'+ppr+runs+'</w:p>'
+    d=minidom.parseString('<root '+ctx.ns+'>'+np_+'</root>'); pe=d.documentElement.firstChild
+    wrap_all(d,pe,ctx,AUT,'w:ins'); ins_mark(d,pe,ctx,AUT); return pe.toxml()
+def words(lo,hi):
+    return sum(len(A[i].split()) for i in range(lo,hi))
+def delete_drawing_near(i,occ=None):
+    """Elimina (con control de cambios) el párrafo con imagen contiguo al párrafo A[i] (antes o después)."""
+    global x
+    j=raw_index_by_text(A[i],occ); ps=all_paras(x)
+    for k in (j-1,j+1,j-2,j+2):
+        if 0<=k<len(ps) and '<w:drawing' in x[ps[k][0]:ps[k][1]]:
+            x=del_para(x,ctx,k,AUT); log.append((f'imagen junto a [{i}]','','(párrafo con imagen eliminado)')); return
+    raise Exception('sin imagen junto a '+A[i][:40])
+
+def accept_aux(path):
+    """Acepta las revisiones de notas al pie, notas finales, encabezados y pies en un docx ya limpio (reescribe el archivo)."""
+    import shutil,tempfile
+    zs=zipfile.ZipFile(path); tmp=path+'.tmp'; n_fix=[]
+    with zipfile.ZipFile(tmp,'w',zipfile.ZIP_DEFLATED) as zo:
+        for it in zs.infolist():
+            d=zs.read(it.filename)
+            if re.match(r'word/(footnotes|endnotes|header\d*|footer\d*)\.xml$',it.filename) and (b'<w:ins ' in d or b'<w:del ' in d):
+                y=strip_comments(accept_all(d.decode('utf8'))[0]); xml.parsers.expat.ParserCreate().Parse(y.encode('utf8'),True); d=y.encode('utf8'); n_fix.append(it.filename)
+            zo.writestr(it,d)
+    zs.close(); shutil.move(tmp,path)
+    return n_fix,hashlib.sha256(open(path,'rb').read()).hexdigest()[:8].upper(),os.path.getsize(path)

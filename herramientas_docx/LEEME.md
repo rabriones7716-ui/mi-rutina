@@ -22,3 +22,9 @@ z = zipfile.ZipFile('documento.docx'); x = z.read('word/document.xml').decode('u
 x = set_text(x, ctx, 11, 'Texto nuevo del párrafo 11.')   # índice de párrafo en bruto
 limpio, uniones, fallos = accept_all(x)
 ```
+
+## Pases del 6-oct (PCR y anexo de flujos)
+
+- `pcr_edit.py`: pase editorial del PCR (Tabla 1A, Tablas 3A a 3D, tabla de la sección IV, códigos en palabras). Insumo: la versión con control de cambios del pase mecánico.
+- `eeo9_pass.py` y `eeo9_fig.py`: pase corto del anexo de flujos económicos y financieros (Figuras 3, 4 y 11; frase que lee juntos C2.2 y C2.4; celda de la tabla de canales).
+- `passlib.py`: `save2` acepta en la versión limpia las revisiones que traigan notas al pie, notas finales, encabezados y pies; `accept_aux(ruta)` hace lo mismo sobre un docx ya guardado; `set_media(rótulo, png, min_idx)` admite documentos cortos.

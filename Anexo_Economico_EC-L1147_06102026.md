@@ -7,7 +7,7 @@ El documento va en versión limpia y con control de cambios; la limpia es exacta
 
 | Archivo | Carpeta de destino en «Entrega Final v4» | SHA-256 (8) | Bytes |
 |---|---|---|---|
-| `Anexo_Analisis_Economico_EC-L1147.docx` | raíz (reemplaza) | `379A32F6` | 2.155.428 |
+| `Anexo_Analisis_Economico_EC-L1147.docx` | raíz (reemplaza) | `7C3632D2` | 2.155.259 |
 | `Anexo_Analisis_Economico_EC-L1147 (con control de cambios).docx` | `Soporte\con control de cambios` | `C88D91F1` | 2.364.110 |
 
 Insumo: la versión con control de cambios vigente (5.016 párrafos aceptados). Autor de las revisiones: «Revisión 2026-10 – versión final». 421 ediciones (2.489 eliminaciones y 2.263 inserciones de Word).
@@ -28,7 +28,8 @@ Los Word no se suben al repositorio porque son de uso interno del BID. Se entreg
 
 ## Verificación
 
-- XML válido en ambas versiones; aceptar todo sobre la versión con control de cambios reproduce la limpia; 0 revisiones sin cerrar.
+- XML válido en ambas versiones; aceptar todo sobre la versión con control de cambios reproduce la limpia; 0 revisiones sin cerrar en el cuerpo.
+- Corrección del mismo día: las notas al pie traían del insumo dos revisiones sin aceptar (2 inserciones y 2 eliminaciones) que la versión limpia conservaba; la limpia se regeneró con esas revisiones aceptadas (SHA 7C3632D2 en lugar de 379A32F6). La versión con control de cambios no cambia.
 - Barrido de restos sobre el limpio: sin «lectura A/B», «sin canales», 33.821, 48.445, 18,45 %, 1,4708, 1,6744, 11,5 %, 48,1 %, 7.123.045, 13.112.347, 18.237.278, 32.861.246, 9.867.307, 124.714, 28,0 %, 97,3 %, EEO#. Quedan solo usos de memoria rotulados: 15.459.050 y 0,1091/1,9425 como base anterior, 83,5 % y 100.000 iteraciones en los cuadros de memoria, 2044 como año en los cuadros históricos y 32,1 M en la frase que lo retira.
 - Render con LibreOffice: 109 páginas (145 con marcas). Revisadas las páginas de la portada, el resumen, los Cuadros 1, 8, 13 a 16, 19, 24, 24 bis, 26, 27, 30, D.1 y E.1, el cuadro de sensibilidad y las figuras 3 a 15.
 
@@ -44,7 +45,7 @@ Los Word no se suben al repositorio porque son de uso interno del BID. Se entreg
 
 ```
 2026-10-06 · Anexo_Analisis_Economico_EC-L1147.docx · versión final (pase mecánico + cuadro de sensibilidad)
-Insumo: versión con control de cambios vigente. Salidas: limpio 379A32F6; con control de cambios C88D91F1.
+Insumo: versión con control de cambios vigente. Salidas: limpio 7C3632D2; con control de cambios C88D91F1.
 Titular con O&M de la medición inteligente al 2,5 %: VAN publicado 33.101.388 (B/C 1,4563; TIR 18,34 %; 2027); convención 47.725.356 (1,6578; 20,22 %; 2026); base del componente 14.739.396.
 Decisión: las lecturas sin beneficios de confiabilidad solo en el cuadro de sensibilidad (115.428 y 14.739.396; 12,02 % y 14,73 %; 2045 y 2033; 54,32 %), con notas al pie.
 Montecarlo MC_B 7,70 %; valores de cambio de Umbrales_B (Cuadro 19); retraso con regla por componente (0,17 M; cota 48,1 M); códigos en palabras; EEO# renumerados; 11 figuras regeneradas.

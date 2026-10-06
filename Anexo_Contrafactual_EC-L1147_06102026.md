@@ -7,7 +7,7 @@ El documento va en versión limpia y con control de cambios; la limpia es exacta
 
 | Archivo | Carpeta de destino en «Entrega Final v4» | SHA-256 (8) | Bytes |
 |---|---|---|---|
-| `Anexo_Analisis_Contrafactual_EC-L1147.docx` | raíz (reemplaza) | `3037ECC1` | 8.296.975 |
+| `Anexo_Analisis_Contrafactual_EC-L1147.docx` | raíz (reemplaza) | `6163F52D` | 8.296.884 |
 | `Anexo_Analisis_Contrafactual_EC-L1147 (con control de cambios).docx` | `Soporte\con control de cambios` | `1AA9636B` | 8.348.089 |
 | `Libro_Analisis_EC-L1147_v2.xlsx` | raíz, renombrado a `Libro_Analisis_EC-L1147.xlsx` (reemplaza al `3AB4C505`) | `EF3E91B4` | — |
 
@@ -44,7 +44,8 @@ El mismo cuadro irá al Análisis Económico (versión completa) y al PCR (cuadr
 
 ## Verificación
 
-- XML válido en ambas versiones; aceptar todo sobre la versión con control de cambios reproduce la limpia; 0 revisiones sin cerrar.
+- XML válido en ambas versiones; aceptar todo sobre la versión con control de cambios reproduce la limpia; 0 revisiones sin cerrar en el cuerpo.
+- Corrección del mismo día: las notas al pie traían del insumo una revisión sin aceptar (1 inserción y 1 eliminación) que la versión limpia conservaba; la limpia se regeneró con esa revisión aceptada (SHA 6163F52D en lugar de 3037ECC1). La versión con control de cambios no cambia.
 - Barrido de restos sobre el limpio: sin «lectura A/B», «sin canales», 33.821, 48.445, 18,45 %, 1,4708, 1,6744, 15.459, 835.08, 83,5, 11,5 %, 48,1 %, 7,08, EEO#. Quedan solo usos legítimos: «2044» como año del valor residual del modelo anterior, «1,67 kWh», «1,47 millones de cocinas», la etiqueta «valor de referencia externo» para fuentes ajenas a los libros y la hoja Solicitudes_EED.
 - Render con LibreOffice: 111 páginas (120 con marcas). Revisadas las páginas de la ficha, el cuadro R1.3, la matriz de escenarios, el Cuadro 14, la cascada, el Montecarlo, el cuadro auxiliar, el cuadro nuevo y las figuras 31 a 50.
 
@@ -59,7 +60,7 @@ El mismo cuadro irá al Análisis Económico (versión completa) y al PCR (cuadr
 
 ```
 2026-10-06 · Anexo_Analisis_Contrafactual_EC-L1147.docx · versión final (pase mecánico + cuadro de sensibilidad)
-Insumo: versión con control de cambios del 6-oct (SHA BCFBBDD7). Salidas: limpio 3037ECC1; con control de cambios 1AA9636B.
+Insumo: versión con control de cambios del 6-oct (SHA BCFBBDD7). Salidas: limpio 6163F52D; con control de cambios 1AA9636B.
 Titular con O&M de la medición inteligente al 2,5 %: VAN publicado 33.101.387,79 (B/C 1,4563; TIR 18,34 %; 2027); convención 47.725.355,51 (1,6578; 20,22 %; 2026).
 Decisión: las lecturas sin beneficios de confiabilidad se muestran solo en el cuadro de sensibilidad (115.428 y 14.739.396 USD; 12,02 % y 14,73 %; 2045 y 2033; P(VAN<0) 54,32 %), con notas al pie.
 Montecarlo MC_B 7,70 %; códigos en palabras; EEO# renumerados; solicitudes → vacíos declarados; figuras 31, 32, 34, 43-50 regeneradas.
