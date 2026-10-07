@@ -122,7 +122,12 @@ NEW=[['Regla de transferencias y coherencia entre programas. La regla aplicada a
  ['No depender de un solo canal. Los beneficios de confiabilidad explican el 31,2 % del valor presente de los beneficios (41,9 % la continuidad en conjunto) y se valoran por contribución, no por atribución.','(Banco) Diversificar desde el diseño los canales de beneficio monetizable de los programas sucesores, en lugar de descansar en uno o dos cuya identificación causal es solo una contribución.']]
 add_rows(T,NEW,nth=1)
 for i in (1397,1398,1399,1400,1401,1402): delete_para(i)
-print('genéricos:',gen_pass([('la lectura publicada','el resultado publicado'),('lectura publicada','resultado publicado')]))
+import passlib
+from lib51 import all_paras as _ap, vis_text as _vt
+_j=[k for k,t in enumerate(passlib.A) if 'gestión de la red (Figura 5).' in t]; assert len(_j)==1,_j
+pairs(_j[0],[('(Figura 5).','(Figura 4).')])
+assert passlib.x.count('name="Figura 5" descr="Figura 5.')==1; passlib.x=passlib.x.replace('name="Figura 5" descr="Figura 5.','name="Figura 4" descr="Figura 4.')
+print('genéricos:',gen_pass([('la lectura publicada','el resultado publicado'),('lectura publicada','resultado publicado'),('cuadro de apoyo de la Figura 4','cuadro de apoyo de la Tabla 1A'),('La Figura 4 contrasta','La Tabla 1A contrasta'),('al cierre (Figura 4)','al cierre (Tabla 1A)'),('(Figura 5)','(Figura 4)'),('Figura 5. Características','Figura 4. Características')]))
 RES=r'lectura publicada|solicitud|32,1 millones de valor presente sobre|1,94 GWh'
 Lc=L.finish('salida_fin/PCR_EC-L1147 (con control de cambios).docx','salida_fin/PCR_EC-L1147.docx',RES,'salida_fin/log_PCR_edit.json')
 # palabras después: localizar II.3 e IV en el limpio

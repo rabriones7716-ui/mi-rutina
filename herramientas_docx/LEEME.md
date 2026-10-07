@@ -28,3 +28,4 @@ limpio, uniones, fallos = accept_all(x)
 - `pcr_edit.py`: pase editorial del PCR (Tabla 1A, Tablas 3A a 3D, tabla de la sección IV, códigos en palabras). Insumo: la versión con control de cambios del pase mecánico.
 - `eeo9_pass.py` y `eeo9_fig.py`: pase corto del anexo de flujos económicos y financieros (Figuras 3, 4 y 11; frase que lee juntos C2.2 y C2.4; celda de la tabla de canales).
 - `passlib.py`: `save2` acepta en la versión limpia las revisiones que traigan notas al pie, notas finales, encabezados y pies; `accept_aux(ruta)` hace lo mismo sobre un docx ya guardado; `set_media(rótulo, png, min_idx)` admite documentos cortos.
+- `xlsx_xml.py`: edición mínima de libros xlsx a nivel de XML (celda, fórmula, texto en línea; filas nuevas; `fullCalcOnLoad`), conserva gráficos y comentarios. `anexos_pass.py`: pase del 6-oct sobre EEO1, EEO6, Sustento_AMI y Escenario_Macro_C23 (verificación con copias recalculadas en LibreOffice).
