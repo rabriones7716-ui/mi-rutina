@@ -1,0 +1,53 @@
+# Traspaso al agente local · cierre de la Entrega Final v4 de EC-L1147 · 7-oct-2026
+
+Eres un agente de Claude Code en el PC del usuario (Windows, PowerShell, Excel y Word disponibles). Continúas el cierre de la entrega final del Programa EC-L1147 para el BID. La carpeta de trabajo es `G:\Mi unidad\EC_L1147\Estudio\Entrega Final v4` (raíz: documentos finales; `Soporte\`: registro, memo, copias previas; `Soporte\Revisión 29092026\`: revisión del 29-sep con `Bloque8b\` y `agentes\`). El repositorio `mi-rutina` (rama `claude/cuadro-precios-unificado-e1j33t`) tiene en `herramientas_docx\` las herramientas y en la raíz las notas de entrega del 6-oct (`PCR_EC-L1147_06102026.md`, `Anexo_Contrafactual…`, `Anexo_Economico…`, `Anexo_Flujos…`, `Anexos_Excel_EC-L1147_06102026.md`, `LEEME_ENTREGA_FINAL_06102026.md`). Léelas antes de tocar nada; no releas documentos enteros si basta con buscar.
+
+## Reglas permanentes
+- Español, coma decimal, frases cortas. Cada cifra con unidad, año de dólares (USD de 2015 al 12 %) y fuente (hoja y celda del libro).
+- Ninguna cifra titular cambia sin decisión explícita del usuario. Tu trabajo es propagar el titular del 6-oct, no recalcularlo.
+- Códigos en palabras: «lectura B» es «resultado publicado»; «lectura A» es «convención de facturación». Las lecturas sin beneficios de confiabilidad solo aparecen en el cuadro de sensibilidad de cada documento.
+- No se piden más datos a las distribuidoras: toda brecha se declara como vacío al cierre.
+- Word: edición con control de cambios, autor «Revisión 2026-10 – versión final»; la versión limpia es la de control de cambios con todo aceptado, cuerpo y notas al pie. Excel con gráficos (Libro de Análisis, Escenario_Macro): nunca guardar con openpyxl; editar en Excel o con `herramientas_docx\xlsx_xml.py`.
+- Antes de modificar un archivo, copia en `Soporte\copias previas\` con sufijo de fecha. Registro en `Soporte\Registro de revisión 29092026.md`, UTF-8 sin BOM, una entrada fechada por bloque de trabajo, sin duplicar.
+- Los Word y Excel del BID no se suben al repositorio; sí las notas Markdown y las herramientas. El escenario de emergencia 15/35 % no se toca. El usuario es sensible al costo de tokens: informes cortos, sin volcados.
+
+## Titular vigente (Libro de Confiabilidad y VAN, `Libro_Confiabilidad_VAN_EC-L1147.xlsx`, SHA 74346390…, modificado 2026-10-07 11:38)
+- Resultado publicado: VAN 33.101.387,79; B/C 1,4563; TIR 18,34 %; recuperación 2027 (`Flujo_Anual!D15, D22, D24, D34`; `AMI_Regla!C43`). Convención de facturación: 47.725.355,51; 1,6578; 20,22 %; 2026 (`AMI_Regla!B43`).
+- Sin beneficios de confiabilidad: publicado 115.427,83 (TIR 12,02 %; B/C 1,0016; 2045; `Flujo_Anual!E15, E24, E22, E34`); convención 14.739.395,55 (14,73 %; 1,2032; 2033).
+- O&M de la medición inteligente: 2,5 % anual del CAPEX desde 2023, VP 719.654,04 (`Flujo_Anual!V70`). Es el único cambio de titular respecto del 24-sep: todo VAN de la base anterior baja 0,72 M; TIR y B/C no se desplazan linealmente y se leen del libro.
+- Montecarlo `MC_B!G4:G8`: 7,70 % (media 27,75; P5 −3,35; P50 26,14; P95 64,77 M); 54,32 % sin confiabilidad; 23,11 % sin duración; 6,63 % y 98,33 % con excedente fijo. Valores de cambio `Umbrales_B!F40:F46`: excedente 0,0625; utilización 0,4166; CENS 386,58; tarifa 0,0357; ratio 1,1124. Sostenibilidad `Sostenibilidad_Tasa!B50:F55`: S1 28.401.479; S2 17.968.938; S3 7.020.038; umbral 0,2957; caída 0,3133. Retraso `Retraso_B`: R2 33.273.671 (0,17 M sobre el publicado), R1 81.172.425 (cota 48,1 M). Brecha `Brecha_Tarifaria!D43:D44, B52:B53`: 0,8051 y 1,1608 ¢/kWh; 24,23 % y 34,94 %. Por OED `AMI_Regla!B40:C43`: I 16.203.285,62; II 17.517.623,74 (32.141.591,46 convención); III −619.521,57.
+
+## Estado al 7-oct
+Hechos y entregados: PCR (limpio 1BE5BDA8), Análisis Contrafactual (6163F52D), Análisis Económico (7C3632D2), Anexo de Flujos (B3E4EA0F), EEO1 (6BDF08C3), EEO6 (681E7AB7), Sustento_AMI (87080819), Escenario_Macro_C23 (0A62734F), `LEEME_ENTREGA_FINAL.md`. El guion `cierre_local_06102026.ps1` ya corrió: huellas tomadas, nueve entradas en el registro, memo con la primera pasada de sustituciones. Su informe está en `Soporte\Revisión 29092026\agentes\cierre_local_20261006.txt` y el barrido en `barrido_cifras_viejas_20261006.csv`.
+
+## Tareas, en este orden
+
+### T1. `Soporte\Revisión 29092026\Bloque8b\Bloque8b_Cierre_LecturaUnificada.xlsx`
+El libro de cierre de la revisión del 29-sep sigue con el titular anterior (29 celdas del barrido). El memo de armonización lee de él. En Excel: localiza el bloque de insumos `In_1147!B45:B50` y la celda `B93`; sustituye el titular anterior (33.821.041,83; TIR 0,184456; B/C 1,4708486; sin canales 835.081,88) por el vigente (33.101.387,79; 0,1834205; 1,4562586; 115.427,83; TIR sin canales 0,1202444; B/C 1,0016) solo si son literales; si son fórmulas que apuntan al Libro de Confiabilidad y VAN, actualiza el vínculo. Reescribe `Léeme!A3` con el titular vigente y añade una línea fechada. Comprueba que `Cat_1147!V50:X50, AM50, AN50`, `L_1147`, `FIN!N21:O21`, `Umbrales_Desc!B17`, `Decision_cierre!D54:F54` y `Control!B14:B15` se recalculan solos. Anota los valores nuevos de `Cat_1147!V28`, `V13` y de `Umbrales_Desc!B17:B19` (los usa T2). Guarda en Excel, toma SHA-256.
+
+### T2. `Soporte\Memo de armonización EC-L1147 y EC-L1160_29092026.md` (segunda pasada)
+La primera pasada cambió 33.821.041,83, 33,82 M, 18,45 %, 18,4456 % y 1,4708. Queda el VAN escrito como «33,82» a secas y las sensibilidades con la base anterior. Trabaja línea por línea sobre la versión actual (726 líneas; copia previa primero):
+- «33,82» → «33,10» en las líneas 36, 116, 122, 123, 167, 223, 278, 314, 348, 387, 439, 484, 586, 587, 603, 688 y 700. En la 122 la identidad pasa a «VAN(f) = 33,10 + 178,35 × f» si `LC Umbrales_Desc!B17:B19` lo confirma tras T1.
+- Lectura sin beneficios de confiabilidad: «0,84», «12,18 %», «1,0116» → «0,12», «12,02 %», «1,0016» en las líneas 39, 223, 284, 314 y 387; en la 39 corrige las celdas citadas (`Flujo_Anual!E15, E24, E22`). En la 284 la columna ΔVAN sigue en −32,99.
+- Línea 40: «11,5 % y 48,1 %» → «7,70 % y 54,32 % (`MC_B!G4:G5`, Montecarlo del propio libro)»; retira «valor de referencia externo».
+- Sensibilidades cuyo VAN baja 0,72 M y cuya TIR y B/C hay que leer del libro: f y λ (líneas 72, 349, 696: pares (1,7; 0,25) y (1,2; 0,568); hoja `AMI_Sens`, bloque (b), filas FL-01 a FL-05 y la rejilla A40:A46); reparto R.3 (líneas 76, 588, 589, 603, 700: 50 % y 0 %; hoja `Reparto_L1160`, bloque B, y `MB_DELTA`); precio de la energía habilitada (líneas 68, 168, 170: escenarios E13 y E11, y la lectura híbrida 50,32); convergencia 2040 (línea 81: VAN 33,90 · 18,62 % · 1,4720 y sin canales 0,92 · 12,20 %, escenario de la hoja de convergencia); CENS (línea 389: escenario E31); pool N-1 (línea 123: `Cat_1147!V28` y `V13` tras T1). Las columnas ΔVAN frente al titular no cambian cuando ambos términos bajan 0,72; verifica una por una.
+- No toques la línea 138 («48,1 % de la energía descontada» es otra magnitud) ni los párrafos de EC-L1160.
+- Amplía la «Nota del 6-oct-2026» al final del memo con una lista corta de lo cambiado en esta pasada y la fecha. Guarda en UTF-8 sin BOM. Vuelve a buscar `33,82|0,84|12,18|42,80|32,86|31,90|191,30|264,07|33,90|11,5 %|48,1 %` y confirma que solo queda la línea 138 y las menciones «antes 33.821.041,83» de la nota.
+
+### T3. `Libro_Analisis_EC-L1147.xlsx` (memoria; no cambiar el modelo)
+Las 50 celdas del barrido son el modelo histórico (base 15.459.049,60, Montecarlo nativo 7,08 % y 18,45 %, MCPF 1,283): se conservan como memoria. Solo corrige los textos que afirman igualdad con el Libro de Confiabilidad y VAN, porque ya no es cierta: `Nota_OED_oficial!A10`, `Notas_Metodologicas!C12`, `Reconciliacion!C15` y `RESUMEN!A70:A71`. Añade a cada uno: «(base anterior al O&M de la medición inteligente del 6-oct-2026; en el Libro de Confiabilidad y VAN la convención sin beneficios de confiabilidad es ahora 14.739.395,55 = 15.459.049,60 − 719.654,04)». En `Coincidencia_Docs` (filas 5, 49 y 66, columnas D y E) sustituye la cifra citada por los documentos por 14.739.395,55 y deja el control en PASA o explica la diferencia. Edita en Excel (el libro tiene 21 gráficos), guarda, SHA-256.
+
+### T4. `Libro_Confiabilidad_VAN_EC-L1147.xlsx`, hoja `Coincidencia_Docs`
+Registra las celdas nuevas que citan los documentos del 6-oct, con el documento y el apartado: `Flujo_Anual!B15:E34` y `V70`; `MC_B!G4:G8` y `B4:F8`; `Umbrales_B!F40:F50`; `Sostenibilidad_Tasa!B49:F55`, `B58:F64`, `B79:C86`; `Retraso_B!B46, B50, B53`; `Brecha_Tarifaria!D43:D44`, `B52:B53`, `B58:C58`; `AMI_Regla!B33:D43`; `VAN_Financiero!B74, B75, B89, B93`; `Carbono_B`, `MCPF`, `CENS_ENS`. Sin tocar ninguna otra hoja. Guarda en Excel, SHA-256 nuevo; el anterior (74346390…) queda en el registro.
+
+### T5. `Modulos_Satelite\Modulo_Perdidas_Tecnicas_C1.1_C1.2_EC-L1147.xlsx`
+El barrido marcó `Contrafactual_Bruto!R49` y `Contrafactual!R49` (0,18442) como posible TIR anterior. Mira la fórmula: si es la TIR del programa copiada del libro, enlázala al valor vigente (0,1834205); si es otra magnitud (un cociente propio del módulo), déjala y anótalo.
+
+### T6. Registro y verificación
+Añade al registro una entrada «## 2026-10-07 · Cierre de la revisión del 29-sep al titular del 6-oct» con T1 a T5, SHA de cada libro tocado y lo que no se cambió. Vuelve a correr solo el barrido: `powershell -ExecutionPolicy Bypass -File "<ruta>\cierre_local_06102026.ps1" -SinRegistro -SinMemo`. Resultado esperado: Bloque8b 0 celdas; Libro de Análisis solo celdas de memoria (modelo y Montecarlo nativo); EEO1 4 celdas (historial de `Control_Cambios`, se dejan); módulo de pérdidas según T5. Actualiza el apartado 5 del `LEEME_ENTREGA_FINAL.md` de la raíz si algo de lo anterior cambia lo que dice. Sube al repositorio solo la nota de este bloque (`Cierre_revision_29sep_EC-L1147_07102026.md`) y las herramientas nuevas.
+
+## Pendientes que son decisiones del usuario (no actúes; pregúntale al terminar)
+Renumeración de los anexos EEO# al formato de EC-L1160 (tabla por confirmar; el PCR conserva EEO#1-9; los Excel ya usan EEO3, EEO5, EEO6, EEO10). Resaltado amarillo de los Word (retirarlo o no). EEO#7 permisos ambientales. Calificación por criterio (Tabla 6). Escenario de emergencia 15/35 %. Después: pase editorial del Análisis Económico (capas históricas al apéndice, cascada única) y barrido editorial del Contrafactual; luego EC-L1160.
+
+## Cómo informar
+Al final, un informe corto: tabla de archivos tocados con SHA-256 (8) y bytes, lista de celdas o líneas cambiadas, lo que no se cambió y por qué, y las preguntas pendientes. Sin volcar contenido de los archivos.
