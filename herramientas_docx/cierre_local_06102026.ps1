@@ -2,7 +2,7 @@
 # Hace cuatro cosas, sin Excel, sin Word y sin inteligencia artificial:
 #   1. Huellas SHA-256 de los tres libros y aviso si hay otra copia del Libro de Confiabilidad y VAN modificada hoy.
 #   2. Barrido de cifras viejas en los demás Excel de la entrega (solo lista; no cambia nada).
-#   3. Entradas del 6-oct en Soporte\Registro de revisión 29092026.md (UTF-8 sin BOM; no duplica las que ya existan).
+#   3. Entradas del 5 y 6-oct (nueve) en Soporte\Registro de revisión 29092026.md (UTF-8 sin BOM; no duplica las que ya existan).
 #   4. Memo de armonización: sustituye las cifras del EEO5 que cambiaron y añade una nota fechada.
 # Ejecutar:  powershell -ExecutionPolicy Bypass -File "<ruta>\cierre_local_06102026.ps1"
 # Opciones:  -SinRegistro  -SinMemo  (para omitir los puntos 3 o 4)
@@ -167,6 +167,44 @@ Decisión del usuario del 5-oct-2026, aplicada desde la sesión de Excel el 6-oc
 - Controles con literales sustituidos por referencias vivas (VAN_Programa!G19:G20, Parámetros!B92); controles rebasados según Control_Cambios!A497 en adelante. Rótulos: AMI_Regla!A48 (frase de la medición inteligente) y A1 restituido; VAN_Programa!A112 (C2.2 y C2.4 se leen juntos: 3.561.563); Coincidencia_Docs!A8 y F8 «lectura interna, no publicada», E15 «PCR, EEO4, EEO9».
 - Archivo: {RUTA_EEO5}; SHA-256 {HASH_EEO5}; modificado {FECHA_EEO5}.
 - Pendiente: pase de cifras en el PCR y los anexos; Coincidencia_Docs!B15 y demás citas de los documentos después de ese pase.
+'@),
+    @('## 2026-10-06 · Anexo_Analisis_Contrafactual_EC-L1147.docx · versión final', @'
+## 2026-10-06 · Anexo_Analisis_Contrafactual_EC-L1147.docx · versión final (pase mecánico + cuadro de sensibilidad)
+Insumo: versión con control de cambios del 6-oct (SHA BCFBBDD7). Salidas: limpio 6163F52D (regenerado con las revisiones de las notas al pie aceptadas; antes 3037ECC1); con control de cambios 1AA9636B.
+Titular con O&M de la medición inteligente al 2,5 %: VAN publicado 33.101.388 (B/C 1,4563; TIR 18,34 %; 2027); convención 47.725.356 (1,6578; 20,22 %; 2026).
+Decisión: las lecturas sin beneficios de confiabilidad se muestran solo en el cuadro de sensibilidad (115.428 y 14.739.396 USD; 12,02 % y 14,73 %; 2045 y 2033; P(VAN<0) 54,32 %), con notas al pie.
+Montecarlo MC_B 7,70 %; códigos en palabras; EEO# renumerados; solicitudes → vacíos declarados; figuras 31, 32, 34, 43-50 regeneradas.
+Herramientas: herramientas_docx/passlib.py, cf_pass.py y cf_fig3.py (repositorio, commit del 6-oct).
+'@),
+    @('## 2026-10-06 · Anexo_Analisis_Economico_EC-L1147.docx · versión final', @'
+## 2026-10-06 · Anexo_Analisis_Economico_EC-L1147.docx · versión final (pase mecánico + cuadro de sensibilidad)
+Insumo: versión con control de cambios vigente. Salidas: limpio 7C3632D2 (regenerado con las revisiones de las notas al pie aceptadas; antes 379A32F6); con control de cambios C88D91F1.
+Titular con O&M de la medición inteligente al 2,5 %: VAN publicado 33.101.388 (B/C 1,4563; TIR 18,34 %; 2027); convención 47.725.356 (1,6578; 20,22 %; 2026); base del componente 14.739.396.
+Decisión: las lecturas sin beneficios de confiabilidad solo en el cuadro de sensibilidad (115.428 y 14.739.396; 12,02 % y 14,73 %; 2045 y 2033; 54,32 %), con notas al pie.
+Montecarlo MC_B 7,70 %; valores de cambio de Umbrales_B (Cuadro 19); retraso con regla por componente (0,17 M; cota 48,1 M); códigos en palabras; EEO# renumerados; 11 figuras regeneradas.
+Herramientas: herramientas_docx/passlib.py, ae_pass.py y ae_fig.py (repositorio, commit del 6-oct).
+'@),
+    @('## 2026-10-06 · PCR_EC-L1147.docx · versión final (pase editorial)', @'
+## 2026-10-06 · PCR_EC-L1147.docx · versión final (pase editorial: II.3 y IV a la mitad, compensadas con tablas)
+Insumo: versión con control de cambios del pase mecánico del 6-oct. Salidas: limpio 1BE5BDA8; con control de cambios 3F930E48.
+Tablas nuevas: 1A lógica vertical (antes Figura 4; la Figura 5 pasa a ser la Figura 4); 3A resultado y sensibilidad (cuatro casos con notas al pie); 3B por objetivo y subcomponente; 3C riesgo, valores de cambio, fragilidades y sostenibilidad; 3D eficiencia operativa. II.3: 2.847 → 1.268 palabras de prosa; IV: 3.683 → 1.974.
+Titular sin cambio: VAN 33.101.388 (B/C 1,4563; TIR 18,34 %; 2027); P(VAN<0) 7,70 %. Códigos en palabras. Notas al pie con las revisiones del insumo aceptadas en la limpia.
+Herramientas: herramientas_docx/passlib.py y pcr_edit.py (repositorio, commit del 6-oct).
+'@),
+    @('## 2026-10-06 · Anexo_Flujos_Economicos_Financieros_EC-L1147.docx · versión final', @'
+## 2026-10-06 · Anexo_Flujos_Economicos_Financieros_EC-L1147.docx · versión final (pase corto: figuras y lectura conjunta C2.2+C2.4)
+Insumo: versión con control de cambios del pase mecánico del 6-oct. Salidas: limpio B3E4EA0F; con control de cambios 44947E1E.
+Figuras 3, 4 y 11 regeneradas con el libro vigente; frase C2.2+C2.4 = +3,56 M US$; fila de total de la tabla de canales en palabras (resultado publicado).
+Titular sin cambio: VAN 33.101.388 (convención 47.725.356).
+Herramientas: herramientas_docx/passlib.py, eeo9_pass.py y eeo9_fig.py (repositorio, commit del 6-oct).
+'@),
+    @('## 2026-10-06 · EEO1, EEO6, Sustento_AMI y Escenario_Macro_C23 (xlsx) · titular del 6-oct', @'
+## 2026-10-06 · EEO1, EEO6, Sustento_AMI y Escenario_Macro_C23 (xlsx) · titular del 6-oct
+Salidas: EEO1 6BDF08C3; EEO6 681E7AB7; Sustento_AMI 87080819; Escenario_Macro 0A62734F. LEEME_ENTREGA_FINAL.md reescrito al 6-oct.
+EEO1: VAN por OED en resultado publicado y convención (AMI_Regla B40:C43); Tabla 1A del PCR. EEO6: MC_B, Sostenibilidad_Tasa, Umbrales_B, Retraso_B, Brecha_Tarifaria; avisos retirados.
+Sustento_AMI y Escenario_Macro: parámetro VP O&M 719.654,04 (Flujo_Anual!V70) restado en VAN AMI y del programa; E1/E2/E3 = 31,05/4,57/5,89 M.
+Edición a nivel de XML (gráficos y comentarios intactos); copias recalculadas con LibreOffice sin errores de fórmula nuevos.
+Herramientas: herramientas_docx/xlsx_xml.py y anexos_pass.py (repositorio, commit del 6-oct).
 '@)
   )
   foreach ($e in $entradas) {
@@ -197,7 +235,7 @@ else {
       '1,2830' = '1,2770'; '1,283' = '1,277'
       '−20.400.784,91' = '−21.120.438,95'; '-20.400.784,91' = '-21.120.438,95'; '−20,40 M' = '−21,12 M'; '-20,40 M' = '-21,12 M'
       '5,85 %' = '5,50 %'; '0,6238' = '0,6105'; '62,4 %' = '61,1 %'
-      '15,13 M' = '14,41 M'; '15,07 %' = '14,95 %'; '15.459.049,58' = '14.739.395,54'; '835.081,88' = '115.427,84'
+      '15,13 M' = '14,41 M'; '15,07 %' = '14,95 %'; '15.459.049,58' = '14.739.395,55'; '835.081,88' = '115.427,83'
     }
     $lineas = $t -split "`r?`n"
     foreach ($k in $cambios.Keys) {
